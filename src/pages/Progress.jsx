@@ -150,9 +150,13 @@ function Progress() {
             </div>
           </div>
 
-          <h3 className="section-title">Strength Progress</h3>
-          <div className="strength-list locked blur-content">
-             <div className="strength-item" style={{ pointerEvents: 'none' }}>
+          <h3 className="progress-section-title">Strength Progress</h3>
+          <div className="strength-list locked">
+             <div className="locked-overlay" style={{ borderRadius: '12px' }}>
+               <Lock size={20} />
+               <span>Log workouts to see trends</span>
+             </div>
+             <div className="strength-item blur-content" style={{ pointerEvents: 'none' }}>
                 <div className="item-icon-box"></div>
                 <div className="item-details">
                   <h4>Barbell Bench Press</h4>
@@ -186,7 +190,7 @@ function Progress() {
             </div>
           </div>
 
-          <h3 className="section-title">Strength Progress</h3>
+          <h3 className="progress-section-title">Strength Progress</h3>
           <div className="strength-list">
             {strengthData.length > 0 ? (
               strengthData.map((ex, idx) => (
@@ -313,7 +317,7 @@ function Progress() {
   };
 
   return (
-    <div className="progress-container">
+    <div className="progress-page">
       {selectedExercise ? renderDetailedView() : renderDashboard()}
       <BottomNavigation />
     </div>

@@ -1,5 +1,4 @@
 /* ── Progress Page Base ────────────────────────────────────────────────── */
-.progress-container,
 .progress-page {
   flex: 1;
   background-color: var(--bg-primary);
@@ -127,7 +126,7 @@
 }
 
 /* Strength Progress */
-.section-title {
+.progress-section-title {
   font-size: 18px;
   font-weight: 700;
   color: white;
