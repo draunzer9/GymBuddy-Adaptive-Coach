@@ -1,0 +1,315 @@
+.home-container {
+  flex: 1;
+  background-color: var(--bg-primary);
+  padding: 16px 24px 100px 24px; /* Padding bottom for bottom nav */
+  overflow-y: auto;
+  height: 100%;
+}
+
+/* Prototype Toggle */
+.prototype-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--bg-secondary);
+  padding: 8px 12px;
+  border-radius: var(--radius-full);
+  margin-bottom: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.toggle-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggle-btn.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.greeting {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  margin-top: 32px;
+  color: white;
+}
+
+/* Workout Card */
+.workout-card {
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 24px;
+}
+
+.workout-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--brand-primary);
+  border-radius: 4px 0 0 4px;
+}
+
+.workout-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brand-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.workout-content-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.workout-info {
+  flex: 1;
+}
+
+.workout-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.workout-meta {
+  font-size: 13px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.workout-meta .dot {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.workout-image {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+}
+
+.start-workout-btn {
+  width: 100%;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.stat-card {
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-title {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.stat-highlight {
+  color: white;
+}
+
+.stat-total {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.stat-value-large {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--brand-secondary); /* Neon green/teal */
+  margin-bottom: 8px;
+}
+
+.stat-message {
+  font-size: 12px;
+  color: var(--brand-secondary);
+  font-weight: 600;
+}
+
+.stat-sub-text {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+}
+
+/* Progress Bar */
+.progress-container {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--brand-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+/* Explore Cards */
+.explore-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.explore-card {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.explore-icon {
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+  margin-right: 16px;
+}
+
+.explore-icon.yellow {
+  color: var(--brand-primary);
+}
+
+.explore-text {
+  flex: 1;
+}
+
+.explore-text h4 {
+  font-size: 15px;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.explore-text p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.explore-arrow {
+  color: var(--text-secondary);
+}
+
+/* Weekly Plan List (reused from Onboarding) */
+.weekly-plan-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.weekly-workout-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+.workout-day {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--brand-primary);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.weekly-workout-card h3 {
+  color: white;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.workout-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.workout-meta .dot {
+  margin: 0 4px;
+}

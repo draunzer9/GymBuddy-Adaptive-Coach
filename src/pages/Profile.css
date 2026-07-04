@@ -1,0 +1,406 @@
+/* ── Profile Page ────────────────────────────────────────────────────── */
+.profile-page {
+  flex: 1;
+  background-color: var(--bg-primary);
+  padding: 24px 20px 110px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+/* ── Profile Header ──────────────────────────────────────────────────── */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.avatar-large {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(205, 253, 80, 0.1);
+  border: 1px solid rgba(205, 253, 80, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(205, 253, 80, 0.1);
+}
+
+.profile-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.profile-subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* ── Stats Grid ──────────────────────────────────────────────────────── */
+.stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.stat-box {
+  background: var(--bg-secondary, #1a1a2e);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.stat-num {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--brand-primary, #cdfd50);
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ── Sections ────────────────────────────────────────────────────────── */
+.profile-section {
+  margin-bottom: 28px;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.section-description {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+}
+
+/* ── Coach Tone Selection ────────────────────────────────────────────── */
+.tone-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tone-card {
+  background: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tone-card:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.tone-card.active {
+  border-color: var(--brand-primary, #cdfd50);
+  background: linear-gradient(135deg, rgba(205,253,80,0.04) 0%, var(--bg-secondary) 100%);
+}
+
+.tone-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.tone-card-header h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+}
+
+.tone-card p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.active-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--brand-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Locker Grid (Equipment) ────────────────────────────────────────── */
+.locker-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.locker-card {
+  position: relative;
+  height: 100px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.locker-card:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.locker-card.available {
+  border-color: var(--brand-primary, #cdfd50);
+}
+
+.locker-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+}
+
+.locker-card.available .locker-img {
+  opacity: 0.7;
+}
+
+.locker-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0.2) 100%);
+  padding: 12px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.locker-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  line-height: 1.2;
+}
+
+.locker-check {
+  margin-left: 6px;
+  flex-shrink: 0;
+}
+
+.locker-circle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0,0,0,0.4);
+}
+
+/* ── Joint Pain Profile ─────────────────────────────────────────────── */
+.pain-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pain-pill {
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pain-pill:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.pain-pill.active {
+  background: rgba(248, 113, 113, 0.12);
+  border-color: #f87171;
+  color: #f87171;
+  font-weight: 600;
+}
+
+/* ── Achievements List ───────────────────────────────────────────────── */
+.achievements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ach-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 12px 14px;
+  transition: opacity 0.2s ease;
+}
+
+.ach-card.locked {
+  opacity: 0.55;
+}
+
+.ach-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ach-card.unlocked .ach-icon {
+  background: rgba(205, 253, 80, 0.08);
+}
+
+.ach-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ach-info h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 2px;
+}
+
+.ach-info p {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.ach-status {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+.ach-card.unlocked .ach-status {
+  color: var(--brand-primary);
+}
+
+/* ── Personal Info Grid ──────────────────────────────────────────────── */
+.personal-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.info-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.info-card.full-width {
+  grid-column: span 2;
+}
+
+.info-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.info-value {
+  font-size: 14px;
+  color: white;
+  font-weight: 500;
+}
+
+/* ── Profile Actions ─────────────────────────────────────────────────── */
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 32px;
+  margin-bottom: 24px;
+}
+
+.profile-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 15px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dict-btn {
+  background-color: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.dict-btn:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.logout-btn {
+  background-color: rgba(248, 113, 113, 0.08);
+  border: 1px solid rgba(248, 113, 113, 0.15);
+  color: #f87171;
+}
+
+.logout-btn:hover {
+  background-color: rgba(248, 113, 113, 0.15);
+  border-color: rgba(248, 113, 113, 0.25);
+}
+

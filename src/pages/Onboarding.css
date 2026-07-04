@@ -1,0 +1,356 @@
+.onboarding-container {
+  height: 100%;
+  background-color: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.onboarding-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-top: 20px;
+}
+
+.step-indicator {
+  display: flex;
+  gap: 8px;
+}
+
+.step-dot {
+  width: 24px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: var(--border);
+  transition: all 0.3s ease;
+}
+
+.step-dot.active {
+  background-color: var(--brand-primary);
+  width: 32px;
+}
+
+.onboarding-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.onboarding-subtitle {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+}
+
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+/* Single Option Card */
+.option-card {
+  display: flex;
+  align-items: center;
+  padding: 18px 20px;
+  background-color: white;
+  border: 2px solid transparent;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+  transition: all 0.2s ease;
+}
+
+.option-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.04);
+}
+
+.option-card.selected {
+  border-color: var(--brand-primary);
+  background-color: var(--brand-light);
+}
+
+.option-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  color: var(--brand-primary);
+}
+
+.option-card.selected .option-icon {
+  background-color: white;
+}
+
+.option-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+/* Grid Options (for equipment) */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+.grid-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 12px;
+  background-color: white;
+  border: 2px solid transparent;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+  transition: all 0.2s ease;
+}
+
+.grid-card.selected {
+  border-color: var(--brand-primary);
+  background-color: var(--brand-light);
+}
+
+.grid-icon {
+  margin-bottom: 12px;
+  color: var(--text-secondary);
+}
+
+.grid-card.selected .grid-icon {
+  color: var(--brand-primary);
+}
+
+.grid-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.onboarding-footer {
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+/* Plan Ready Screen */
+.plan-ready-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.plan-summary {
+  background: white;
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  margin-top: 32px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.summary-item:last-child {
+  margin-bottom: 0;
+}
+
+.summary-item svg {
+  color: var(--success);
+}
+
+.summary-text {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* Info help button on grid card */
+.info-help-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.info-help-btn:hover {
+  color: var(--brand-primary);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Onboarding dictionary overlay */
+.onboarding-dict-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 250;
+  display: flex;
+  align-items: flex-end;
+}
+
+.onboarding-dict-modal {
+  width: 100%;
+  max-height: 90vh;
+  background-color: var(--bg-primary);
+  border-radius: 24px 24px 0 0;
+  padding: 24px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.onboarding-dict-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.onboarding-dict-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+.onboarding-dict-header p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 4px 0 0 0;
+}
+
+.onboarding-dict-header .close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+}
+
+.onboarding-dict-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  flex: 1;
+  padding-bottom: 20px;
+}
+
+.onboarding-dict-card {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 12px;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.onboarding-dict-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.onboarding-dict-card.active-select {
+  border-color: var(--brand-primary);
+}
+
+.card-image-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.card-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-info h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 2px 0;
+}
+
+.card-cat {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--brand-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 4px 0 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dict-select-btn {
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid rgba(205, 253, 80, 0.3);
+  background: transparent;
+  color: var(--brand-primary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dict-select-btn.selected {
+  background-color: var(--brand-primary);
+  color: #111;
+  border-color: var(--brand-primary);
+}
+

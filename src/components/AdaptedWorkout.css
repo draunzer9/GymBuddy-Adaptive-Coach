@@ -1,0 +1,209 @@
+.adapted-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-primary);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  max-width: var(--app-max-width, 480px);
+  margin: 0 auto;
+}
+
+.adapted-header {
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.header-title {
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.adapted-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.ai-message-card {
+  background-color: rgba(217, 249, 36, 0.05); /* very light neon tint */
+  border: 1px solid rgba(217, 249, 36, 0.2);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.ai-avatar {
+  font-size: 24px;
+  background: var(--brand-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ai-text {
+  color: white;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.section-title {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.adapted-workout-card {
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.workout-image-container {
+  position: relative;
+  height: 160px;
+}
+
+.workout-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Exercises List in Overview */
+.exercises-list-overview {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.exercise-overview-item {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  gap: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.exercise-overview-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.ex-number {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.ex-info h4 {
+  color: white;
+  margin-bottom: 4px;
+  font-size: 16px;
+}
+
+.ex-info p {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.workout-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+}
+
+.workout-overlay .workout-title {
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.workout-details {
+  padding: 16px 20px;
+  display: flex;
+  gap: 24px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--brand-primary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.adapted-footer {
+  padding: 24px;
+  background-color: var(--bg-primary);
+}
+
+.start-btn {
+  width: 100%;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.adapted-loading-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.adapted-loading-wrapper h2 {
+  color: white;
+  font-size: 20px;
+}
+
+.ai-loader-spinner {
+  width: 64px;
+  height: 64px;
+  border: 4px solid rgba(217, 249, 36, 0.1);
+  border-top-color: var(--brand-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

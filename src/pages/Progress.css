@@ -1,0 +1,332 @@
+/* ── Progress Page Base ────────────────────────────────────────────────── */
+.progress-page {
+  flex: 1;
+  background-color: var(--bg-primary);
+  padding: 24px 20px 110px;
+  overflow-y: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.progress-content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Dashboard View ──────────────────────────────────────────────────── */
+.dashboard-view {
+  display: flex;
+  flex-direction: column;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.progress-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.4px;
+  margin: 0;
+}
+
+.week-dropdown {
+  background-color: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* Consistency Card */
+.consistency-card {
+  background: linear-gradient(135deg, #5b21b6 0%, #4c1d95 100%);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.consistency-card .card-title {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 12px 0;
+}
+
+.score-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+}
+
+.score-value {
+  font-size: 42px;
+  font-weight: 800;
+  color: white;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.score-value span {
+  font-size: 24px;
+}
+
+.score-message {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.bar-chart-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 80px;
+}
+
+.bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.bar-track {
+  width: 14px;
+  height: 60px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.bar-fill {
+  width: 100%;
+  background-color: #4ade80; /* bright green */
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
+}
+
+.bar-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}
+
+/* Strength Progress */
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 16px 0;
+}
+
+.strength-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.strength-item {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.strength-item:active {
+  transform: scale(0.98);
+}
+
+.item-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  margin-right: 16px;
+}
+
+.item-details {
+  flex: 1;
+}
+
+.item-details h4 {
+  margin: 0 0 6px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+}
+
+.weight-flow {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.weight-flow .arrow {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.increase-tag {
+  color: var(--success-color, #4ade80);
+  font-weight: 600;
+}
+
+.item-trend {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ── Detailed View ───────────────────────────────────────────────────── */
+.detailed-view {
+  background-color: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.detailed-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: white;
+  padding: 8px;
+  margin-left: -8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detailed-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+/* Tabs */
+.detailed-tabs {
+  display: flex;
+  background-color: var(--bg-secondary);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 32px;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab.active {
+  background-color: #6366f1; /* Purple/Indigo accent from screenshot */
+  color: white;
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+}
+
+/* Chart */
+.chart-wrapper {
+  background-color: var(--bg-secondary);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.chart-svg-container {
+  width: 100%;
+  aspect-ratio: 2 / 1.5;
+}
+
+.line-chart {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.chart-label {
+  font-size: 12px;
+  fill: white;
+  font-weight: 600;
+}
+
+.chart-x-label {
+  font-size: 11px;
+  fill: var(--text-secondary);
+}
+
+/* Stats */
+.stats-grid-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.stat-box {
+  background-color: var(--bg-secondary);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.stat-lbl {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.stat-val {
+  font-size: 20px;
+  font-weight: 800;
+  color: white;
+  text-align: center;
+}
+
+.stat-val small {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}

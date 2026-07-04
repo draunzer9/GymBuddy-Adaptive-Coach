@@ -1,0 +1,341 @@
+.active-workout-container {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--bg-primary);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  max-width: var(--app-max-width, 480px);
+  margin: 0 auto;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.active-workout-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  background-color: var(--bg-primary);
+}
+
+.active-workout-content {
+  flex: 1;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.exercise-title {
+  font-size: 28px;
+  color: white;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.set-indicator {
+  color: var(--brand-primary);
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+/* Logging Container */
+.logging-container {
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.target-text {
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.log-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.log-row label {
+  color: white;
+  font-weight: 500;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.stepper button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+}
+
+.stepper input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  width: 100%;
+}
+
+.stepper input:focus {
+  outline: none;
+}
+
+.complete-set-btn {
+  margin-top: 16px;
+  padding: 18px;
+  font-size: 18px;
+}
+
+/* Rest Container */
+.rest-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.rest-title {
+  color: var(--text-secondary);
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.timer-display {
+  font-size: 72px;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 40px;
+  font-variant-numeric: tabular-nums;
+}
+
+.rest-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.btn-icon.circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.skip-btn {
+  padding: 12px 32px;
+}
+
+.next-up-preview {
+  background-color: var(--bg-secondary);
+  width: 100%;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.next-up-preview .label {
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.next-up-preview .next-info {
+  color: white;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+/* Progress bar at bottom */
+.workout-progress-bar {
+  height: 8px;
+  background-color: var(--bg-secondary);
+  width: 100%;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--brand-primary);
+  transition: width 0.3s ease;
+}
+
+/* Calorie Tracking Styles */
+.header-calories-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: rgba(217, 249, 36, 0.08);
+  border: 1px solid rgba(217, 249, 36, 0.2);
+  border-radius: 999px;
+  padding: 6px 14px;
+  color: var(--brand-primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.calorie-estimate-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 10px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-top: -6px;
+  margin-bottom: -6px;
+}
+
+.calorie-estimate-pill strong {
+  color: white;
+}
+
+/* Equipment Busy Banner */
+.busy-banner {
+  background-color: rgba(255, 165, 0, 0.15);
+  color: #ffa500;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.busy-banner.clickable {
+  cursor: pointer;
+  border: 1px solid rgba(255, 165, 0, 0.3);
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.busy-banner.clickable:active {
+  background-color: rgba(255, 165, 0, 0.25);
+}
+
+.busy-banner.clickable:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Alternatives View */
+.alternatives-view {
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.alt-subtitle {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.alt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.alt-card {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.alt-card.selected {
+  border-color: var(--brand-primary);
+  background-color: rgba(217, 249, 36, 0.05);
+}
+
+.alt-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  background-color: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  color: white;
+}
+
+.alt-card.selected .alt-icon {
+  background-color: rgba(217, 249, 36, 0.2);
+  color: var(--brand-primary);
+}
+
+.alt-details {
+  flex: 1;
+}
+
+.alt-details h4 {
+  margin: 0 0 4px 0;
+  font-size: 15px;
+  color: white;
+}
+
+.alt-similarity {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--success-color, #4ade80);
+}
+
+.alt-radio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 12px;
+}
+
+.use-alt-btn {
+  margin-top: auto;
+  margin-bottom: 12px;
+}

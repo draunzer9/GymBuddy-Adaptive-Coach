@@ -1,0 +1,91 @@
+.otp-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+}
+
+.otp-header {
+  padding: 24px;
+}
+
+.otp-content {
+  padding: 0 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.otp-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.otp-subtitle {
+  color: var(--text-secondary);
+  font-size: 15px;
+  margin-bottom: 40px;
+  text-align: center;
+  max-width: 280px;
+}
+
+.otp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
+.otp-inputs {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 16px;
+}
+
+.otp-digit-input {
+  width: 56px;
+  height: 64px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--bg-secondary);
+  color: white;
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.otp-digit-input:focus {
+  outline: none;
+  border-color: var(--brand-primary);
+  background-color: rgba(40, 53, 72, 1);
+  box-shadow: 0 0 0 2px rgba(217, 249, 36, 0.2);
+}
+
+.resend-container {
+  margin-top: 32px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.timer-text {
+  color: white;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.btn-resend {
+  background: none;
+  border: none;
+  color: var(--brand-primary);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 8px;
+}

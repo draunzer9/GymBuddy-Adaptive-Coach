@@ -1,0 +1,86 @@
+.midweek-checkin-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-primary);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease forwards;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.midweek-checkin-header {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  background: var(--bg-primary);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.midweek-checkin-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 20px 100px;
+}
+
+.midweek-checkin-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.midweek-checkin-section {
+  margin-bottom: 32px;
+}
+
+.midweek-checkin-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.midweek-checkin-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 20px 32px;
+  background: linear-gradient(to top, var(--bg-primary) 80%, transparent);
+  display: flex;
+  justify-content: center;
+}
+
+.issues-textarea {
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 15px;
+  resize: vertical;
+  margin-top: 12px;
+}
+
+.issues-textarea:focus {
+  outline: none;
+  border-color: var(--brand-primary);
+}
+
+.start-ai-btn {
+  width: 100%;
+  max-width: 400px;
+}

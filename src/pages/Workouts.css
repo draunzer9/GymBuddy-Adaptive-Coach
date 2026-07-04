@@ -1,0 +1,376 @@
+/* ── Workouts Page ─────────────────────────────────── */
+.workouts-page {
+  flex: 1;
+  background-color: var(--bg-primary);
+  padding: 24px 20px 110px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.workouts-header {
+  margin-bottom: 24px;
+}
+
+.workouts-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+
+.workouts-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ── Section Label ─────────────────────────────────── */
+.section-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin: 28px 0 14px;
+}
+
+/* ── Week Progress Card ────────────────────────────── */
+.week-progress-card {
+  background: linear-gradient(135deg, rgba(205,253,80,0.08) 0%, rgba(255,255,255,0.03) 100%);
+  border: 1px solid rgba(205,253,80,0.15);
+  border-radius: 20px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 4px;
+}
+
+.progress-ring-container {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  flex-shrink: 0;
+}
+
+.ring-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring-percent {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--brand-primary);
+  line-height: 1;
+}
+
+.ring-sub {
+  font-size: 10px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.progress-stats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.pstat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.pstat-val {
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  line-height: 1;
+}
+
+.pstat-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.pstat-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(255,255,255,0.08);
+}
+
+/* ── Plan List Cards ───────────────────────────────── */
+.plan-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.plan-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-secondary);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 16px;
+  padding: 16px;
+  gap: 12px;
+  transition: border-color 0.2s ease;
+}
+
+.plan-card--today {
+  border-color: rgba(205,253,80,0.25);
+  background: linear-gradient(135deg, rgba(205,253,80,0.05) 0%, var(--bg-secondary) 100%);
+}
+
+.plan-card-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+}
+
+.plan-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-today {
+  background-color: var(--brand-primary);
+  box-shadow: 0 0 8px var(--brand-primary);
+}
+
+.dot-upcoming {
+  background-color: rgba(255,255,255,0.2);
+}
+
+.plan-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.plan-card-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--brand-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 4px;
+}
+
+.plan-card:not(.plan-card--today) .plan-card-tag {
+  color: var(--text-secondary);
+}
+
+.plan-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.plan-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.meta-dot {
+  margin: 0 2px;
+  color: rgba(255,255,255,0.2);
+}
+
+.plan-start-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--brand-primary);
+  color: #111;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.plan-start-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.03);
+}
+
+/* ── Plan Complete Card ────────────────────────────── */
+.plan-complete-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(205,253,80,0.07) 0%, rgba(255,255,255,0.02) 100%);
+  border: 1px solid rgba(205,253,80,0.2);
+  border-radius: 20px;
+  padding: 32px 24px;
+  margin-top: 8px;
+  gap: 10px;
+}
+
+.plan-complete-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+.plan-complete-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.btn-generate {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--brand-primary);
+  color: #111;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: opacity 0.2s ease;
+}
+
+.btn-generate:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.mini-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0,0,0,0.2);
+  border-top-color: #111;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── History Cards ─────────────────────────────────── */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background-color: var(--bg-secondary);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+.history-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(205,253,80,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.history-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.history-info h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-info p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.history-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--brand-primary);
+  background: rgba(205,253,80,0.1);
+  border: 1px solid rgba(205,253,80,0.2);
+  padding: 4px 10px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+/* ── Explore Tiles ─────────────────────────────────── */
+.explore-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.explore-tile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background-color: var(--bg-secondary);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 14px;
+  padding: 16px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.explore-tile:hover {
+  border-color: rgba(255,255,255,0.12);
+}
+
+.explore-tile h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 2px;
+}
+
+.explore-tile p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+}
