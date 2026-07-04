@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { User, ShieldAlert, Award, Dumbbell, Sparkles, CheckCircle2, ChevronRight, Check, BookOpen, LogOut } from 'lucide-react';
 import BottomNavigation from '../components/BottomNavigation';
 import { EQUIPMENT_DATA } from '../data/equipment';
-import { saveActiveUserToDb } from '../services/DatabaseService';
+import { saveActiveUserToDb, clearActiveSession } from '../services/DatabaseService';
 import { GoogleSheetsService } from '../services/GoogleSheetsService';
 import './Profile.css';
 
@@ -115,9 +115,8 @@ function Profile() {
     // Track log out
     GoogleSheetsService.trackLogout();
 
-    // Clear all gymbuddy_ session keys (DB is stored under gymdb_users, so it is safe)
-    const keysToRemove = Object.keys(localStorage).filter(key => key.startsWith('gymbuddy_'));
-    keysToRemove.forEach(key => localStorage.removeItem(key));
+    // Use centralized clear (preserves gymdb_users so other accounts are safe)
+    clearActiveSession();
 
     navigate('/');
   };

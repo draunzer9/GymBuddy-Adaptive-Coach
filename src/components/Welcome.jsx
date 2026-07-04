@@ -8,7 +8,9 @@ function Welcome() {
 
   // Auto-redirect returning users — skip the welcome splash entirely
   useEffect(() => {
-    if (localStorage.getItem('gymbuddy_is_registered') === 'true') {
+    const userId = localStorage.getItem('gymbuddy_active_user_id');
+    const isRegistered = localStorage.getItem('gymbuddy_is_registered');
+    if (userId && isRegistered === 'true') {
       navigate('/home', { replace: true });
     }
   }, [navigate]);

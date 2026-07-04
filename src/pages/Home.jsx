@@ -8,6 +8,7 @@ import ActiveWorkout from '../components/ActiveWorkout';
 import ExerciseDetails from '../components/ExerciseDetails';
 import MidWeekCheckIn from '../components/MidWeekCheckIn';
 import { adaptWorkout, generateNextWeeklyPlan, performMidWeekCheckpoint } from '../services/AICoachService';
+import { saveActiveUserToDb } from '../services/DatabaseService';
 import { GoogleSheetsService } from '../services/GoogleSheetsService';
 import './Home.css';
 
@@ -353,6 +354,10 @@ function Home() {
             const newHistory = [...workoutHistory, adaptedPlan.workout];
             setWorkoutHistory(newHistory);
             localStorage.setItem('gymbuddy_workout_history', JSON.stringify(newHistory));
+
+            // ✅ Persist to DB immediately so data is safe if user re-logs in
+            const userId = localStorage.getItem('gymbuddy_active_user_id');
+            if (userId) saveActiveUserToDb(userId);
 
             // Automatically trigger Mid-Week Checkpoint at or past the halfway point
             const newTotalWorkouts = newWeeklyPlan.length + newCompletedCount;

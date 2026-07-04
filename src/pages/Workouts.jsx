@@ -6,6 +6,7 @@ import AdaptedWorkout from '../components/AdaptedWorkout';
 import ActiveWorkout from '../components/ActiveWorkout';
 import ExerciseDetails from '../components/ExerciseDetails';
 import { adaptWorkout, generateNextWeeklyPlan } from '../services/AICoachService';
+import { saveActiveUserToDb } from '../services/DatabaseService';
 import './Workouts.css';
 
 function Workouts() {
@@ -88,6 +89,10 @@ function Workouts() {
     const newCount = completedWorkouts + 1;
     setCompletedWorkouts(newCount);
     localStorage.setItem('gymbuddy_completed_workouts', newCount.toString());
+
+    // ✅ Save entire session to DB immediately so data survives on re-login
+    const userId = localStorage.getItem('gymbuddy_active_user_id');
+    if (userId) saveActiveUserToDb(userId);
 
     setAdaptedPlan(null);
   };
