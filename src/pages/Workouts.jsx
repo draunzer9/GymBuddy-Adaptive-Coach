@@ -45,6 +45,18 @@ function Workouts() {
 
   const handleCheckInComplete = async (answers) => {
     setShowCheckIn(false);
+
+    if (answers.skipAdaptation) {
+      const baseWorkout = weeklyPlan.length > 0 
+        ? weeklyPlan[0] 
+        : { title: 'General Workout', duration: '30 min', exercisesList: [] };
+      setAdaptedPlan({
+        message: "No changes needed! Let's crush today's planned workout. 💪",
+        workout: baseWorkout
+      });
+      return;
+    }
+
     setIsAILoading(true);
     try {
       const workoutContext = weeklyPlan.length > 0 ? {

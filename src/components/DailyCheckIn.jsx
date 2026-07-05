@@ -10,8 +10,8 @@ function DailyCheckIn({ onComplete, onCancel }) {
   const [issuesText, setIssuesText] = useState('');
 
   const handleNoDeviation = () => {
-    // No changes needed, just continue with the regular plan
-    onCancel();
+    // No changes needed, skip AI adaptation and load the plan immediately
+    onComplete({ skipAdaptation: true });
   };
 
   const handleYesDeviation = () => {
