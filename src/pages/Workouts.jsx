@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Clock, Dumbbell, Zap, ChevronRight, Trophy, CheckCircle2, Play, RotateCcw, Flame } from 'lucide-react';
 import BottomNavigation from '../components/BottomNavigation';
 import DailyCheckIn from '../components/DailyCheckIn';
+import MidWeekCheckIn from '../components/MidWeekCheckIn';
 import AdaptedWorkout from '../components/AdaptedWorkout';
 import ActiveWorkout from '../components/ActiveWorkout';
 import ExerciseDetails from '../components/ExerciseDetails';
-import { adaptWorkout, generateNextWeeklyPlan } from '../services/AICoachService';
+import { adaptWorkout, generateNextWeeklyPlan, performMidWeekCheckpoint } from '../services/AICoachService';
 import { saveActiveUserToDb } from '../services/DatabaseService';
 import './Workouts.css';
 
@@ -16,7 +17,10 @@ function Workouts() {
 
   // Workout flow states
   const [showCheckIn, setShowCheckIn] = useState(false);
+  const [showMidWeekCheckIn, setShowMidWeekCheckIn] = useState(false);
+  const [midWeekMessage, setMidWeekMessage] = useState(null);
   const [isAILoading, setIsAILoading] = useState(false);
+  const [isMidWeekLoading, setIsMidWeekLoading] = useState(false);
   const [adaptedPlan, setAdaptedPlan] = useState(null);
   const [isWorkoutActive, setIsWorkoutActive] = useState(false);
   const [activeExerciseForDetails, setActiveExerciseForDetails] = useState(null);
@@ -61,6 +65,28 @@ function Workouts() {
     }
   };
 
+  const handleMidWeekComplete = async (status) => {
+    setShowMidWeekCheckIn(false);
+    setIsMidWeekLoading(true);
+    try {
+      const profile = JSON.parse(localStorage.getItem('gymbuddy_user_profile') || '{}');
+      const result = await performMidWeekCheckpoint(profile, weeklyPlan, completedWorkouts, status);
+      
+      if (result.adaptedRemainingWorkouts && result.adaptedRemainingWorkouts.length > 0) {
+        setWeeklyPlan(result.adaptedRemainingWorkouts);
+        localStorage.setItem('gymbuddy_weekly_plan', JSON.stringify(result.adaptedRemainingWorkouts));
+        localStorage.setItem('gymbuddy_midweek_done', 'true');
+      }
+      
+      setMidWeekMessage(result.coachMessage || "Your remaining week has been successfully adapted!");
+    } catch (e) {
+      console.error(e);
+      alert("Failed to adapt week: " + e.message);
+    } finally {
+      setIsMidWeekLoading(false);
+    }
+  };
+
   const handleWorkoutFinish = (caloriesMap = {}, totalBurn = 0) => {
     setIsWorkoutActive(false);
 
@@ -93,6 +119,13 @@ function Workouts() {
     // ✅ Save entire session to DB immediately so data survives on re-login
     const userId = localStorage.getItem('gymbuddy_active_user_id');
     if (userId) saveActiveUserToDb(userId);
+
+    // Automatically trigger Mid-Week Checkpoint at or past the halfway point
+    const newTotalWorkouts = newWeeklyPlan.length + newCount;
+    const hasDoneMidWeek = localStorage.getItem('gymbuddy_midweek_done');
+    if (newCount >= Math.ceil(newTotalWorkouts / 2) && newWeeklyPlan.length > 0 && !hasDoneMidWeek) {
+      setTimeout(() => setShowMidWeekCheckIn(true), 600);
+    }
 
     setAdaptedPlan(null);
   };
@@ -309,6 +342,27 @@ function Workouts() {
           onClose={() => setIsWorkoutActive(false)}
           onFinish={handleWorkoutFinish}
         />
+      )}
+
+      {showMidWeekCheckIn && (
+        <MidWeekCheckIn onComplete={handleMidWeekComplete} />
+      )}
+
+      {isMidWeekLoading && (
+        <div className="ai-loading-overlay">
+          <div className="ai-spinner"></div>
+          <p>Adapting your remaining week...</p>
+        </div>
+      )}
+
+      {midWeekMessage && (
+        <div className="midweek-success-overlay">
+          <div className="midweek-success-card">
+            <h3>Plan Updated!</h3>
+            <p>{midWeekMessage}</p>
+            <button className="primary-btn" onClick={() => setMidWeekMessage(null)}>Got it</button>
+          </div>
+        </div>
       )}
 
       {activeExerciseForDetails && (
