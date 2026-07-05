@@ -17,8 +17,9 @@ function Login() {
 
   const handleSendOTP = (e) => {
     e.preventDefault();
-    if (phoneNumber.length > 5) {
-      navigate('/otp', { state: { phoneNumber } });
+    const normalizedPhone = phoneNumber.replace(/\D/g, '');
+    if (normalizedPhone.length >= 5) {
+      navigate('/otp', { state: { phoneNumber: normalizedPhone } });
     }
   };
 
