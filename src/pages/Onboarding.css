@@ -210,7 +210,7 @@
 
 /* Onboarding dictionary overlay */
 .onboarding-dict-overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(6px);
