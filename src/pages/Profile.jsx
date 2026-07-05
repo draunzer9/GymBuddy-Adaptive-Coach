@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, ShieldAlert, Award, Dumbbell, Sparkles, CheckCircle2, ChevronRight, Check, BookOpen, LogOut } from 'lucide-react';
+import { User, ShieldAlert, Award, Dumbbell, Sparkles, CheckCircle2, ChevronRight, Check, BookOpen, LogOut, Clock } from 'lucide-react';
 import BottomNavigation from '../components/BottomNavigation';
 import { EQUIPMENT_DATA } from '../data/equipment';
 import { saveActiveUserToDb, clearActiveSession } from '../services/DatabaseService';
@@ -121,6 +121,14 @@ function Profile() {
     navigate('/');
   };
 
+  const handleSimulateInactivity = () => {
+    // Set last active date to 48 hours ago (2 days)
+    const twoDaysAgo = Date.now() - (48 * 60 * 60 * 1000);
+    localStorage.setItem('gymbuddy_last_active_date', twoDaysAgo.toString());
+    navigate('/home');
+  };
+
+  const currentToneDesc = TONE_OPTIONS.find(t => t.id === selectedTone)?.desc;
 
   // Infers achievements based on workout completions
   const achievements = [
@@ -271,6 +279,10 @@ function Profile() {
 
       {/* ── Actions / Buttons ───────────────────── */}
       <div className="profile-actions">
+        <button className="profile-action-btn" onClick={handleSimulateInactivity} style={{ backgroundColor: 'rgba(255, 68, 68, 0.1)', color: '#ff4444', borderColor: 'rgba(255, 68, 68, 0.2)' }}>
+          <Clock size={16} />
+          <span>Simulate 2 Days Inactivity</span>
+        </button>
         <button className="profile-action-btn dict-btn" onClick={() => navigate('/dictionary')}>
           <BookOpen size={16} />
           <span>See Equipment Dictionary</span>

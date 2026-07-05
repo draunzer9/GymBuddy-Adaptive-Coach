@@ -1,0 +1,102 @@
+.missed-workout-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.missed-workout-modal {
+  background: var(--bg-secondary, #1a1a2e);
+  border: 1px solid var(--border-color, #2d2d44);
+  border-radius: 20px;
+  padding: 32px 24px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.missed-icon-wrapper {
+  width: 64px;
+  height: 64px;
+  background: rgba(255, 68, 68, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.missed-icon-wrapper svg {
+  color: #ff4444;
+}
+
+.missed-workout-modal h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary, #ffffff);
+  margin-bottom: 16px;
+}
+
+.missed-stats {
+  background: rgba(255, 68, 68, 0.05);
+  border: 1px solid rgba(255, 68, 68, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.missed-stats p {
+  font-size: 15px;
+  color: var(--text-secondary, #a0a0b0);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.missed-stats strong {
+  color: #ff4444;
+  font-size: 24px;
+  display: block;
+  margin-top: 8px;
+}
+
+.missed-motivation {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary, #ffffff);
+  margin-bottom: 24px;
+  font-style: italic;
+}
+
+.missed-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.missed-actions .btn-primary {
+  width: 100%;
+  background: var(--accent-primary, #00f0ff);
+  color: #000;
+  font-weight: 700;
+  padding: 16px;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+}
+
+.missed-actions .btn-secondary {
+  width: 100%;
+  background: transparent;
+  color: var(--text-secondary, #a0a0b0);
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+}

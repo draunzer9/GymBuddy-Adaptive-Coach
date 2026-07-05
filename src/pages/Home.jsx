@@ -7,6 +7,7 @@ import AdaptedWorkout from '../components/AdaptedWorkout';
 import ActiveWorkout from '../components/ActiveWorkout';
 import ExerciseDetails from '../components/ExerciseDetails';
 import MidWeekCheckIn from '../components/MidWeekCheckIn';
+import MissedWorkoutModal from '../components/MissedWorkoutModal';
 import { adaptWorkout, generateNextWeeklyPlan, performMidWeekCheckpoint } from '../services/AICoachService';
 import { saveActiveUserToDb } from '../services/DatabaseService';
 import { GoogleSheetsService } from '../services/GoogleSheetsService';
@@ -23,6 +24,8 @@ function Home() {
   const [isMidWeekLoading, setIsMidWeekLoading] = useState(false);
   const [isGeneratingNextWeek, setIsGeneratingNextWeek] = useState(false);
   const [weeklyPlan, setWeeklyPlan] = useState([]);
+  const [showMissedWorkout, setShowMissedWorkout] = useState(false);
+  const [missedCalories, setMissedCalories] = useState(0);
   
   // Track completed workouts count — read fresh on mount after DB restore
   const [completedWorkouts, setCompletedWorkouts] = useState(0);
@@ -70,6 +73,25 @@ function Home() {
         console.error(e);
       }
     }
+
+    // Check for missed workouts (inactivity of 2+ days)
+    const lastActive = localStorage.getItem('gymbuddy_last_active_date');
+    const now = Date.now();
+    if (lastActive) {
+      const diffMs = now - parseInt(lastActive, 10);
+      const daysMissed = diffMs / (1000 * 60 * 60 * 24);
+      
+      // If inactive for 2 or more days, show modal and estimate calories
+      if (daysMissed >= 2) {
+        // Estimate 450 calories per missed day/workout
+        const missedWorkouts = Math.min(Math.floor(daysMissed), 3); // cap at 3
+        setMissedCalories(missedWorkouts * 450);
+        setShowMissedWorkout(true);
+      }
+    }
+    // Update last active to now
+    localStorage.setItem('gymbuddy_last_active_date', now.toString());
+
   }, []);
 
   // New User Mock Data
@@ -287,6 +309,17 @@ function Home() {
         <DailyCheckIn 
           onComplete={handleCheckInComplete}
           onCancel={() => setShowCheckIn(false)}
+        />
+      )}
+
+      {showMissedWorkout && (
+        <MissedWorkoutModal 
+          missedCalories={missedCalories}
+          onDismiss={() => setShowMissedWorkout(false)}
+          onStartWorkout={() => {
+            setShowMissedWorkout(false);
+            handleStartWorkout();
+          }}
         />
       )}
 
