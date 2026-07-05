@@ -345,7 +345,10 @@ function Workouts() {
       )}
 
       {showMidWeekCheckIn && (
-        <MidWeekCheckIn onComplete={handleMidWeekComplete} />
+        <MidWeekCheckIn 
+          onComplete={handleMidWeekComplete} 
+          onCancel={() => setShowMidWeekCheckIn(false)}
+        />
       )}
 
       {isMidWeekLoading && (

@@ -1,5 +1,5 @@
 .midweek-checkin-container {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -20,11 +20,26 @@
   padding: 16px 20px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background: var(--bg-primary);
   position: sticky;
   top: 0;
   z-index: 10;
   border-bottom: 1px solid var(--border-color);
+}
+
+.skip-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.skip-btn:hover {
+  color: var(--text-primary);
 }
 
 .midweek-checkin-content {
@@ -52,7 +67,7 @@
 }
 
 .midweek-checkin-footer {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;

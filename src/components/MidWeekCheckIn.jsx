@@ -20,6 +20,9 @@ function MidWeekCheckIn({ onComplete, onCancel }) {
         <button className="btn-icon" onClick={onCancel}>
           <ArrowLeft size={24} />
         </button>
+        <button className="skip-btn" onClick={onCancel}>
+          Skip
+        </button>
       </div>
       
       <div className="midweek-checkin-content">
