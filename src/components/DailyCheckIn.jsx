@@ -10,8 +10,8 @@ function DailyCheckIn({ onComplete, onCancel }) {
   const [issuesText, setIssuesText] = useState('');
 
   const handleNoDeviation = () => {
-    // No changes needed, skip AI adaptation and load the plan immediately
-    onComplete({ skipAdaptation: true });
+    // Send optimal defaults so the AI generates the full planned workout
+    onComplete({ feeling: 'Great', time: '60+ min', issues: ['None'] });
   };
 
   const handleYesDeviation = () => {

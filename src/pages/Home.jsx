@@ -148,16 +148,6 @@ function Home() {
 
   const handleCheckInComplete = async (answers) => {
     setShowCheckIn(false);
-
-    if (answers.skipAdaptation) {
-      const baseWorkout = weeklyPlan.length > 0 ? weeklyPlan[0] : currentData.workout;
-      setAdaptedPlan({
-        message: "No changes needed! Let's crush today's planned workout. 💪",
-        workout: baseWorkout
-      });
-      return;
-    }
-
     setIsAILoading(true);
     try {
       GoogleSheetsService.trackCheckIn(answers);
