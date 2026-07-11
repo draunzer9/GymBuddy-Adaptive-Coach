@@ -11,6 +11,7 @@ function OTPVerification() {
   const phoneNumber = location.state?.phoneNumber || 'unknown_phone';
   const [otp, setOtp] = useState(['', '', '', '']);
   const [timer, setTimer] = useState(30);
+  const [isLoading, setIsLoading] = useState(false);
   const inputRefs = useRef([]);
 
   useEffect(() => {
@@ -43,12 +44,14 @@ function OTPVerification() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const code = otp.join('');
     if (code.length === 4) {
+      setIsLoading(true);
       // Try to restore existing user data from DB using their phone as the key
-      if (loadUserFromDb(phoneNumber)) {
+      const exists = await loadUserFromDb(phoneNumber);
+      if (exists) {
         // Returning user: all their data is now restored to localStorage
         localStorage.setItem('gymbuddy_active_user_id', phoneNumber);
         GoogleSheetsService.trackLogin();
@@ -59,11 +62,17 @@ function OTPVerification() {
         localStorage.setItem('gymbuddy_active_user_id', phoneNumber);
         navigate('/register');
       }
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="otp-container">
+      {isLoading && (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>
+          Loading your profile...
+        </div>
+      )}
       <div className="otp-header">
         <button className="btn-icon-back" onClick={() => navigate('/login')}>
           <ArrowLeft size={24} />

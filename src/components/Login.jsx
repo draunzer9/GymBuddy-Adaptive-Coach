@@ -14,6 +14,7 @@ function Login() {
   const [activeBrowser, setActiveBrowser] = useState(null);
   // Track which specific Google account was clicked
   const [pendingAccount, setPendingAccount] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSendOTP = (e) => {
     e.preventDefault();
@@ -23,9 +24,11 @@ function Login() {
     }
   };
 
-  const handleAppleLogin = () => {
+  const handleAppleLogin = async () => {
+    setIsLoading(true);
     const id = 'apple_user';
-    if (loadUserFromDb(id)) {
+    const exists = await loadUserFromDb(id);
+    if (exists) {
       // Existing user: data is restored, go to home
       localStorage.setItem('gymbuddy_active_user_id', id);
       GoogleSheetsService.trackLogin();
@@ -35,6 +38,7 @@ function Login() {
       localStorage.setItem('gymbuddy_active_user_id', id);
       navigate('/register');
     }
+    setIsLoading(false);
   };
 
   const cancelAlert = () => {
@@ -53,11 +57,13 @@ function Login() {
   };
 
   // Called when a specific Google account row is clicked
-  const completeLoginWithAccount = (name, email) => {
+  const completeLoginWithAccount = async (name, email) => {
     setActiveBrowser(null);
+    setIsLoading(true);
     // Use the email as the unique user ID for this account
     const id = email;
-    if (loadUserFromDb(id)) {
+    const exists = await loadUserFromDb(id);
+    if (exists) {
       // Existing user: data restored, go home
       localStorage.setItem('gymbuddy_active_user_id', id);
       GoogleSheetsService.trackLogin();
@@ -68,18 +74,22 @@ function Login() {
       localStorage.setItem('gymbuddy_pending_profile', JSON.stringify({ name, email }));
       navigate('/register');
     }
+    setIsLoading(false);
   };
 
-  const completeFacebookLogin = () => {
+  const completeFacebookLogin = async () => {
     setActiveBrowser(null);
+    setIsLoading(true);
     const id = 'facebook_user';
-    if (loadUserFromDb(id)) {
+    const exists = await loadUserFromDb(id);
+    if (exists) {
       localStorage.setItem('gymbuddy_active_user_id', id);
       navigate('/home');
     } else {
       localStorage.setItem('gymbuddy_active_user_id', id);
       navigate('/register');
     }
+    setIsLoading(false);
   };
 
   const getDomain = (provider) => {
@@ -88,6 +98,11 @@ function Login() {
 
   return (
     <div className="login-container">
+      {isLoading && (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>
+          Loading your profile...
+        </div>
+      )}
       <div className="login-header">
         <button className="btn-icon-back" onClick={() => navigate('/')}>
           <ArrowLeft size={24} />

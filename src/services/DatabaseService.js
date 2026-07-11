@@ -1,17 +1,5 @@
-const DB_KEY = 'gymdb_users'; // Intentionally NOT using gymbuddy_ prefix so logout wipe doesn't destroy the DB
-
-export const getDb = () => {
-  try {
-    const db = localStorage.getItem(DB_KEY);
-    return db ? JSON.parse(db) : {};
-  } catch {
-    return {};
-  }
-};
-
-export const saveDb = (db) => {
-  localStorage.setItem(DB_KEY, JSON.stringify(db));
-};
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 /**
  * Clears all active gymbuddy_ session keys from localStorage.
@@ -25,13 +13,12 @@ export const clearActiveSession = () => {
 };
 
 /**
- * Persists the current active session's gymbuddy_ keys to the multi-user DB
+ * Persists the current active session's gymbuddy_ keys to Firestore
  * under the given userId.
  */
-export const saveActiveUserToDb = (userId) => {
+export const saveActiveUserToDb = async (userId) => {
   if (!userId) return;
 
-  const db = getDb();
   const userData = {};
 
   // Keys to skip — internal/temp keys that should not be persisted per user
@@ -43,37 +30,47 @@ export const saveActiveUserToDb = (userId) => {
     }
   });
 
-  db[userId] = userData;
-  saveDb(db);
+  try {
+    await setDoc(doc(db, "users", userId), userData);
+  } catch (error) {
+    console.error("Error saving user to Firestore", error);
+  }
 };
 
 /**
- * Loads a specific user's data from the DB into active localStorage.
+ * Loads a specific user's data from Firestore into active localStorage.
  * CRITICAL: Always clears the current session first to prevent data bleed.
  * Returns true if user was found, false if brand new user.
  */
-export const loadUserFromDb = (userId) => {
+export const loadUserFromDb = async (userId) => {
   if (!userId) return false;
 
   // ✅ CRITICAL FIX: Clear any existing session data BEFORE loading the new user
   clearActiveSession();
 
-  const db = getDb();
-  const userData = db[userId];
-
-  if (userData && Object.keys(userData).length > 0) {
-    // Restore all this user's keys to active localStorage
-    Object.keys(userData).forEach(key => {
-      localStorage.setItem(key, userData[key]);
-    });
-    return true; // Successfully loaded existing user
+  try {
+    const docSnap = await getDoc(doc(db, "users", userId));
+    if (docSnap.exists()) {
+      const userData = docSnap.data();
+      // Restore all this user's keys to active localStorage
+      Object.keys(userData).forEach(key => {
+        localStorage.setItem(key, userData[key]);
+      });
+      return true; // Successfully loaded existing user
+    }
+  } catch (error) {
+    console.error("Error loading user from Firestore", error);
   }
 
   return false; // User not found — brand new
 };
 
-export const userExists = (userId) => {
+export const userExists = async (userId) => {
   if (!userId) return false;
-  const db = getDb();
-  return !!db[userId] && Object.keys(db[userId]).length > 0;
+  try {
+    const docSnap = await getDoc(doc(db, "users", userId));
+    return docSnap.exists();
+  } catch (error) {
+    return false;
+  }
 };

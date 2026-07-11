@@ -159,6 +159,9 @@ function Onboarding() {
   const totalSteps = 7;
   
   // State for selections
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [showDict, setShowDict] = useState(false);
   const [goals, setGoals] = useState([]);
   const [experience, setExperience] = useState('');
   const [availableTime, setAvailableTime] = useState('');
@@ -167,9 +170,6 @@ function Onboarding() {
   const [otherCondition, setOtherCondition] = useState('');
   const [weeklyPlan, setWeeklyPlan] = useState([]);
   const [userName, setUserName] = useState('');
-
-  // Dictionary Overlay States
-  const [showDict, setShowDict] = useState(false);
 
   useEffect(() => {
     const savedProfile = localStorage.getItem('gymbuddy_user_profile');
@@ -186,17 +186,19 @@ function Onboarding() {
     }
   }, []);
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step < totalSteps) {
       setStep(step + 1);
     } else {
+      setIsSaving(true);
       // Mark onboarding as complete and user as fully registered
       localStorage.setItem('gymbuddy_onboarding_done', 'true');
       localStorage.setItem('gymbuddy_is_registered', 'true');
       // Persist ALL session data (profile + plan + preferences) to the database
       const userId = localStorage.getItem('gymbuddy_active_user_id') || 'unknown_user';
-      saveActiveUserToDb(userId);
+      await saveActiveUserToDb(userId);
       GoogleSheetsService.trackOnboardingCompleted(goals, equipment, 0);
+      setIsSaving(false);
       navigate('/home');
     }
   };
@@ -248,6 +250,7 @@ function Onboarding() {
     if (step === 6) {
       const goalTitles = goals.map(gId => GOAL_OPTIONS.find(opt => opt.id === gId)?.title).join(', ');
       const fetchPlan = async () => {
+        setIsGenerating(true);
         const plan = await generateWeeklyPlan({
           goal: goalTitles,
           experience,
@@ -262,6 +265,7 @@ function Onboarding() {
         localStorage.setItem('gymbuddy_goal', goalTitles);
         localStorage.setItem('gymbuddy_equipment_list', JSON.stringify(equipment));
         localStorage.setItem('gymbuddy_active_pain', JSON.stringify(healthConditions));
+        setIsGenerating(false);
         setStep(7);
       };
       fetchPlan();
@@ -270,6 +274,11 @@ function Onboarding() {
 
   return (
     <div className="onboarding-container" style={{ position: 'relative' }}>
+      {isSaving && (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#fff', fontSize: '18px', fontWeight: 'bold' }}>
+          Setting up your profile...
+        </div>
+      )}
       <div className="onboarding-header">
         <div className="onboarding-header-top">
           <h2 className="brand-text">GymBuddy</h2>
