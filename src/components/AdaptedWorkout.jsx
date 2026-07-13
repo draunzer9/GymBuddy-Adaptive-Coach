@@ -62,15 +62,8 @@ function AdaptedWorkout({ aiResponse, isLoading, onCancel, onStart, onExerciseCl
       </div>
 
       <div className="adapted-content">
-        {/* AI Coaching Message */}
-        {message && (
-          <div className="ai-message-card">
-            <div className="ai-avatar">🤖</div>
-            <p className="ai-text">{message}</p>
-          </div>
-        )}
 
-        <h3 className="section-title">Your Adapted Workout</h3>
+        <h3 className="section-title" style={{ marginTop: '0' }}>Your Adapted Workout</h3>
 
         <div className="adapted-workout-card">
           <div className="workout-image-container">
