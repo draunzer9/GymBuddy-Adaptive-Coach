@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Phone, X, Share } from 'lucide-react';
 import { loadUserFromDb, userExists } from '../services/DatabaseService';
 import { GoogleSheetsService } from '../services/GoogleSheetsService';
+import { AmplitudeService } from '../services/AmplitudeService';
 import './Login.css';
 
 function Login() {
@@ -32,6 +33,8 @@ function Login() {
       // Existing user: data is restored, go to home
       localStorage.setItem('gymbuddy_active_user_id', id);
       GoogleSheetsService.trackLogin();
+      AmplitudeService.setUserId(id);
+      AmplitudeService.trackLogin();
       navigate('/home');
     } else {
       // New user: save the ID and send to registration
@@ -67,6 +70,8 @@ function Login() {
       // Existing user: data restored, go home
       localStorage.setItem('gymbuddy_active_user_id', id);
       GoogleSheetsService.trackLogin();
+      AmplitudeService.setUserId(id);
+      AmplitudeService.trackLogin();
       navigate('/home');
     } else {
       // New user: pre-seed their name/email, go to registration

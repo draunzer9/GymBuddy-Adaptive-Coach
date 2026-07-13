@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { loadUserFromDb } from '../services/DatabaseService';
 import { GoogleSheetsService } from '../services/GoogleSheetsService';
+import { AmplitudeService } from '../services/AmplitudeService';
 import './OTPVerification.css';
 
 function OTPVerification() {
@@ -55,6 +56,8 @@ function OTPVerification() {
         // Returning user: all their data is now restored to localStorage
         localStorage.setItem('gymbuddy_active_user_id', phoneNumber);
         GoogleSheetsService.trackLogin();
+        AmplitudeService.setUserId(phoneNumber);
+        AmplitudeService.trackLogin();
         navigate('/home');
       } else {
         // Brand new phone number — they haven't registered yet

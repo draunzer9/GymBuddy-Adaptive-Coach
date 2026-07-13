@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Play, Pause, ChevronRight, CheckCircle2, Flame, RefreshCw, AlertTriangle, Activity, Dumbbell, Circle, CheckCircle } from 'lucide-react';
 import { generateAlternativeExercise } from '../services/AICoachService';
 import { GoogleSheetsService } from '../services/GoogleSheetsService';
+import { AmplitudeService } from '../services/AmplitudeService';
 import './ActiveWorkout.css';
 
 function ActiveWorkout({ workout, onFinish, onClose }) {
@@ -140,6 +141,7 @@ function ActiveWorkout({ workout, onFinish, onClose }) {
         // Workout complete - send cumulative calorie mapping metrics back
         const durationSecs = Math.floor((Date.now() - startTime) / 1000);
         GoogleSheetsService.trackWorkoutCompleted(workout.title, durationSecs, newTotal, exercises.length);
+        AmplitudeService.trackWorkoutCompleted(workout.title, durationSecs, newTotal, exercises.length);
         onFinish(updatedExCalories, newTotal);
       }
     }

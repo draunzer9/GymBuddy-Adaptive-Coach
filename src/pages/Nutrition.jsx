@@ -3,6 +3,7 @@ import { Apple, Droplets, Flame, ChevronRight, CheckCircle2, ChevronLeft, Refres
 import BottomNavigation from '../components/BottomNavigation';
 import { generateMealPlan, generateProgressiveMealPlan } from '../services/MealPlanService';
 import { GoogleSheetsService } from '../services/GoogleSheetsService';
+import { AmplitudeService } from '../services/AmplitudeService';
 import './Nutrition.css';
 
 function MacroRing({ protein, carbs, fat }) {
@@ -175,6 +176,7 @@ function Nutrition() {
       setMealPlan(plan);
       localStorage.setItem('gymbuddy_meal_plan', JSON.stringify(plan));
       GoogleSheetsService.trackMealPlanGenerated(nutritionDays);
+      AmplitudeService.trackMealPlanGenerated(nutritionDays);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -202,7 +204,14 @@ function Nutrition() {
         fat: mealPlan?.dailyTargets?.fat || 0,
         water: glasses
       });
+      AmplitudeService.trackDayCompleted(nutritionDays, {
+        protein: mealPlan?.dailyTargets?.protein || 0,
+        carbs: mealPlan?.dailyTargets?.carbs || 0,
+        fat: mealPlan?.dailyTargets?.fat || 0,
+        water: glasses
+      });
       GoogleSheetsService.trackMealPlanGenerated(nextDays);
+      AmplitudeService.trackMealPlanGenerated(nextDays);
     } catch (e) {
       console.error(e);
       setError("Failed to generate your personalized meal plan. Please try again.");

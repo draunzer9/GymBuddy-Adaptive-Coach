@@ -11,6 +11,7 @@ import MissedWorkoutModal from '../components/MissedWorkoutModal';
 import { adaptWorkout, generateNextWeeklyPlan, performMidWeekCheckpoint } from '../services/AICoachService';
 import { saveActiveUserToDb } from '../services/DatabaseService';
 import { GoogleSheetsService } from '../services/GoogleSheetsService';
+import { AmplitudeService } from '../services/AmplitudeService';
 import './Home.css';
 
 function Home() {
@@ -173,6 +174,7 @@ function Home() {
     setIsAILoading(true);
     try {
       GoogleSheetsService.trackCheckIn(answers);
+      AmplitudeService.trackCheckIn(answers);
       // Pass the real today's workout (from the weekly plan if available)
       const workoutContext = weeklyPlan.length > 0 ? {
         title: weeklyPlan[0].title,

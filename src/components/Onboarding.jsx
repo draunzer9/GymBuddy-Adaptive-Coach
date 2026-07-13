@@ -10,6 +10,7 @@ import { generateWeeklyPlan } from '../services/AICoachService';
 import { EQUIPMENT_DATA } from '../data/equipment';
 import { saveActiveUserToDb } from '../services/DatabaseService';
 import { GoogleSheetsService } from '../services/GoogleSheetsService';
+import { AmplitudeService } from '../services/AmplitudeService';
 import './Onboarding.css';
 import '../pages/Dictionary.css'; // Always reuse Dictionary css for uniform modal/detail layouts
 
@@ -198,6 +199,7 @@ function Onboarding() {
       const userId = localStorage.getItem('gymbuddy_active_user_id') || 'unknown_user';
       await saveActiveUserToDb(userId);
       GoogleSheetsService.trackOnboardingCompleted(goals, equipment, 0);
+      AmplitudeService.trackOnboardingCompleted(goals, equipment);
       setIsSaving(false);
       navigate('/home');
     }

@@ -5,6 +5,7 @@ import BottomNavigation from '../components/BottomNavigation';
 import { EQUIPMENT_DATA } from '../data/equipment';
 import { saveActiveUserToDb, clearActiveSession } from '../services/DatabaseService';
 import { GoogleSheetsService } from '../services/GoogleSheetsService';
+import { AmplitudeService } from '../services/AmplitudeService';
 import './Profile.css';
 
 const TONE_OPTIONS = [
@@ -114,6 +115,7 @@ function Profile() {
 
     // Track log out
     GoogleSheetsService.trackLogout();
+    AmplitudeService.trackLogout();
 
     // Use centralized clear (preserves gymdb_users so other accounts are safe)
     clearActiveSession();

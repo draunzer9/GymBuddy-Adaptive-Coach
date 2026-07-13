@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, User, Mail, Phone, Calendar, Ruler, Weight } from 'lucide-react';
 import { GoogleSheetsService } from '../services/GoogleSheetsService';
+import { AmplitudeService } from '../services/AmplitudeService';
 import './RegistrationForm.css';
 
 function RegistrationForm() {
@@ -44,6 +45,8 @@ function RegistrationForm() {
     localStorage.removeItem('gymbuddy_pending_profile');
 
     GoogleSheetsService.trackRegistration(formData);
+    AmplitudeService.setUserId(userId);
+    AmplitudeService.trackRegistration(formData);
 
     // Proceed to onboarding flow
     navigate('/onboarding');
