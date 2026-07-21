@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { X, Play, Pause, ChevronRight, CheckCircle2, Flame, RefreshCw, AlertTriangle, Activity, Dumbbell, Circle, CheckCircle } from 'lucide-react';
+import { X, Play, Pause, ChevronRight, CheckCircle2, Flame, RefreshCw, AlertTriangle, Activity, Dumbbell, Circle, CheckCircle, Info } from 'lucide-react';
 import { generateAlternativeExercise } from '../services/AICoachService';
+import ExerciseDetails from './ExerciseDetails';
 import { GoogleSheetsService } from '../services/GoogleSheetsService';
 import { AmplitudeService } from '../services/AmplitudeService';
 import './ActiveWorkout.css';
@@ -27,6 +28,9 @@ function ActiveWorkout({ workout, onFinish, onClose }) {
   const [showAlternativesView, setShowAlternativesView] = useState(false);
   const [alternativeOptions, setAlternativeOptions] = useState([]);
   const [selectedAltIndex, setSelectedAltIndex] = useState(0);
+
+  // State for viewing exercise details overlay
+  const [viewingDetails, setViewingDetails] = useState(null);
 
   const currentEx = exercises[currentExIndex];
 
@@ -172,7 +176,15 @@ function ActiveWorkout({ workout, onFinish, onClose }) {
       </div>
 
       <div className="active-workout-content">
-        <h2 className="exercise-title">{currentEx.name}</h2>
+        <h2
+          className="exercise-title"
+          style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
+          onClick={() => setViewingDetails(currentEx)}
+          title="Tap to view exercise details"
+        >
+          {currentEx.name}
+          <Info size={18} color="var(--text-secondary)" style={{ flexShrink: 0 }} />
+        </h2>
         
         {showAlternativesView ? (
           <div className="alternatives-view">
@@ -299,6 +311,14 @@ function ActiveWorkout({ workout, onFinish, onClose }) {
           style={{ width: `${((currentExIndex + 1) / exercises.length) * 100}%` }}
         ></div>
       </div>
+
+      {/* Exercise Details overlay — renders on top, user taps back to return here */}
+      {viewingDetails && (
+        <ExerciseDetails
+          exercise={viewingDetails}
+          onClose={() => setViewingDetails(null)}
+        />
+      )}
     </div>
   );
 }
