@@ -1,4 +1,6 @@
+import React, { useState } from 'react';
 import { ArrowLeft, Play, Dumbbell, Clock, ChevronRight, Flame } from 'lucide-react';
+import ExerciseDetails from './ExerciseDetails';
 import './AdaptedWorkout.css';
 
 const estimateExerciseCalories = (ex) => {
@@ -22,7 +24,8 @@ const estimateExerciseCalories = (ex) => {
   return Math.round((activeBurn + loadBurn) * ex.sets);
 };
 
-function AdaptedWorkout({ aiResponse, isLoading, onCancel, onStart, onExerciseClick }) {
+function AdaptedWorkout({ aiResponse, isLoading, onCancel, onStart }) {
+  const [selectedExercise, setSelectedExercise] = useState(null);
   if (isLoading) {
     return (
       <div className="adapted-container">
@@ -98,7 +101,7 @@ function AdaptedWorkout({ aiResponse, isLoading, onCancel, onStart, onExerciseCl
               <div
                 className="exercise-overview-item"
                 key={ex.id || index}
-                onClick={() => onExerciseClick && onExerciseClick(ex)}
+                onClick={() => setSelectedExercise(ex)}
               >
                 <div className="ex-number">{index + 1}</div>
                 <div className="ex-info">
@@ -123,6 +126,14 @@ function AdaptedWorkout({ aiResponse, isLoading, onCancel, onStart, onExerciseCl
           <Play size={16} fill="currentColor" /> Let's Go!
         </button>
       </div>
+
+      {/* Exercise Details — fully self-contained overlay inside this screen */}
+      {selectedExercise && (
+        <ExerciseDetails
+          exercise={selectedExercise}
+          onClose={() => setSelectedExercise(null)}
+        />
+      )}
     </div>
   );
 }

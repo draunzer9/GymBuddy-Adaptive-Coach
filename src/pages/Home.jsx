@@ -5,7 +5,6 @@ import BottomNavigation from '../components/BottomNavigation';
 import DailyCheckIn from '../components/DailyCheckIn';
 import AdaptedWorkout from '../components/AdaptedWorkout';
 import ActiveWorkout from '../components/ActiveWorkout';
-import ExerciseDetails from '../components/ExerciseDetails';
 import MidWeekCheckIn from '../components/MidWeekCheckIn';
 import MissedWorkoutModal from '../components/MissedWorkoutModal';
 import { adaptWorkout, generateNextWeeklyPlan, performMidWeekCheckpoint } from '../services/AICoachService';
@@ -38,7 +37,6 @@ function Home() {
 
   // New states for Phase 13
   const [isWorkoutActive, setIsWorkoutActive] = useState(false);
-  const [activeExerciseForDetails, setActiveExerciseForDetails] = useState(null);
 
   useEffect(() => {
     const savedPlan = localStorage.getItem('gymbuddy_weekly_plan');
@@ -367,9 +365,6 @@ function Home() {
           onStart={(workout) => {
             setIsWorkoutActive(true);
           }}
-          onExerciseClick={(ex) => {
-            setActiveExerciseForDetails(ex);
-          }}
         />
       )}
 
@@ -412,12 +407,6 @@ function Home() {
         />
       )}
 
-      {activeExerciseForDetails && (
-        <ExerciseDetails 
-          exercise={activeExerciseForDetails}
-          onClose={() => setActiveExerciseForDetails(null)}
-        />
-      )}
     </div>
   );
 }
