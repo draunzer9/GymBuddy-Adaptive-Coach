@@ -80,12 +80,12 @@ If their energy is low/tired, give them a LIGHTER VERSION (lighter weight, longe
 If everything is good (Great/Good, 60+ min, None), just hype them up.
 
 OUTPUT FORMAT INSTRUCTIONS:
-Return a JSON object EXACTLY matching this structure. The exercisesList MUST contain 4 to 6 exercises, ensuring a complete workout. Do not just return 3 exercises.
+Return a JSON object EXACTLY matching this structure. The exercisesList MUST contain EXACTLY ${baseWorkout.exercisesCount || 4} exercises — this is the number planned for today's workout. Do NOT add more or fewer exercises than this count unless the user explicitly has less time, in which case you can reduce.
 {
   "message": "Your conversational coaching message to the user based on the rules. Use paragraphs (\\n\\n).",
   "workout": {
     "title": "Adapted title (or keep the same)",
-    "duration": "Adapted duration (match their available time)",
+    "duration": "Adapted duration — if the user's time matches, use '${baseWorkout.duration}'. Only reduce if user has less time.",
     "exercisesList": [
       {
         "id": "e1",
@@ -105,10 +105,12 @@ Return a JSON object EXACTLY matching this structure. The exercisesList MUST con
   }
 }
 CRITICAL INSTRUCTIONS: 
-1. The JSON above is ONLY an example of the structure. DO NOT just return "Barbell Bench Press". You MUST generate 4 to 6 REAL, UNIQUE exercises that actually fit the "Base Workout Planned for Today".
-2. For videoUrl, construct a direct YouTube search link (https://www.youtube.com/results?search_query=...). 
-3. For bodyDiagramUrl, construct an image URL using https://loremflickr.com/500/500/anatomy, followed by the primary target muscle (e.g., anatomy,chest). 
-4. Do not use markdown blocks like \`\`\`json. Return ONLY the raw JSON string so it can be parsed natively.`;
+1. The JSON above is ONLY an example of the structure. DO NOT just return "Barbell Bench Press". You MUST generate EXACTLY ${baseWorkout.exercisesCount || 4} REAL, UNIQUE exercises that actually fit the "Base Workout Planned for Today".
+2. STRICTLY respect the exercise count: ${baseWorkout.exercisesCount || 4} exercises. Do not add extra exercises.
+3. STRICTLY respect the duration: the workout should take approximately ${baseWorkout.duration}. Only shorten it if the user has less time available.
+4. For videoUrl, construct a direct YouTube search link (https://www.youtube.com/results?search_query=...). 
+5. For bodyDiagramUrl, construct an image URL using https://loremflickr.com/500/500/anatomy, followed by the primary target muscle (e.g., anatomy,chest). 
+6. Do not use markdown blocks like \`\`\`json. Return ONLY the raw JSON string so it can be parsed natively.`;
 
   try {
     const result = await model.generateContent(systemPrompt);
