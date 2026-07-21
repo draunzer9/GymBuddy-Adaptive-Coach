@@ -313,3 +313,27 @@
 .workout-meta .dot {
   margin: 0 4px;
 }
+
+.home-disclaimer {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 24px;
+}
+
+.home-disclaimer-icon {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.home-disclaimer-text {
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 0;
+}

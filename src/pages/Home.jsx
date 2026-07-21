@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Play, Activity, Calendar, Trophy, Zap, ChevronRight, User, Clock, Dumbbell } from 'lucide-react';
+import { Play, Activity, Calendar, Trophy, Zap, ChevronRight, User, Clock, Dumbbell, Info } from 'lucide-react';
 import BottomNavigation from '../components/BottomNavigation';
 import DailyCheckIn from '../components/DailyCheckIn';
 import AdaptedWorkout from '../components/AdaptedWorkout';
@@ -304,6 +304,12 @@ function Home() {
         </div>
       </div>
 
+      <div className="home-disclaimer">
+        <Info size={16} className="home-disclaimer-icon" />
+        <p className="home-disclaimer-text">
+          AI recommendations are personalized from verified exercises for guidance only. Always exercise safely, stop if you feel pain, and consult a healthcare professional for medical conditions or personalized nutrition advice.
+        </p>
+      </div>
       
       <BottomNavigation />
 
