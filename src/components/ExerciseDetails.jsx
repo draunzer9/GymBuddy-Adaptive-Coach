@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, PlayCircle, Info, Dumbbell } from 'lucide-react';
+import { ArrowLeft, PlayCircle, Dumbbell } from 'lucide-react';
 import { getMuscleAnatomy, getVideoId } from '../data/exerciseData';
 import './ExerciseDetails.css';
 
@@ -34,10 +34,11 @@ function ExerciseDetails({ exercise, onClose }) {
     <div className="exercise-details-overlay">
       <div className="exercise-details-modal">
 
-        {/* Close button */}
+        {/* Back button top bar */}
         <div className="modal-top-bar">
-          <button className="btn-icon" onClick={onClose}>
-            <X size={24} />
+          <button className="btn-icon" onClick={onClose} style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)' }}>
+            <ArrowLeft size={22} />
+            <span style={{ fontSize: '14px', fontWeight: 600 }}>Back to Exercises</span>
           </button>
         </div>
 
