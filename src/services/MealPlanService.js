@@ -2,7 +2,58 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const apiKey = import.meta.env.VITE_LLM_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
 
-export const generateMealPlan = async (goals, userProfile = {}) => {
+// ── Helper: build a dietary constraints string from user nutrition preferences ──
+function buildPrefsStr(nutritionPrefs) {
+  if (!nutritionPrefs) return '';
+
+  const lines = [];
+
+  // Diet type
+  const dietLabels = {
+    no_preference: 'No specific diet restriction',
+    vegetarian: 'Vegetarian (no meat or fish)',
+    vegan: 'Vegan (completely plant-based, no animal products)',
+    keto: 'Ketogenic (high fat, very low carb, <50g carbs/day)',
+    paleo: 'Paleo (whole, unprocessed foods — no grains, legumes, dairy)',
+    mediterranean: 'Mediterranean diet (olive oil, fish, vegetables, whole grains, legumes)',
+    intermittent_fasting: 'Intermittent Fasting — design the eating window for 16:8 (eat between 12 PM and 8 PM)',
+    high_protein: 'High Protein priority (≥40% calories from protein)',
+  };
+  if (nutritionPrefs.dietType && nutritionPrefs.dietType !== 'no_preference') {
+    lines.push(`Diet Type: ${dietLabels[nutritionPrefs.dietType] || nutritionPrefs.dietType}`);
+  }
+
+  // Allergies / intolerances
+  if (nutritionPrefs.allergies && nutritionPrefs.allergies.length > 0) {
+    lines.push(`STRICT Allergies / Intolerances — NEVER include these: ${nutritionPrefs.allergies.join(', ')}`);
+  }
+
+  // Meal count
+  if (nutritionPrefs.mealCount) {
+    lines.push(`Number of meals per day: EXACTLY ${nutritionPrefs.mealCount} meals — no more, no fewer`);
+  }
+
+  // Calorie mode
+  const calModeLabels = {
+    deficit: 'Caloric Deficit (−300 to −500 kcal below TDEE to lose weight)',
+    maintenance: 'Maintenance calories (match estimated TDEE)',
+    surplus: 'Caloric Surplus (+200 to +400 kcal above TDEE to build muscle)',
+  };
+  if (nutritionPrefs.calorieMode === 'custom' && nutritionPrefs.customCalories) {
+    lines.push(`Calorie Target: EXACTLY ${nutritionPrefs.customCalories} kcal per day`);
+  } else if (nutritionPrefs.calorieMode && calModeLabels[nutritionPrefs.calorieMode]) {
+    lines.push(`Calorie Approach: ${calModeLabels[nutritionPrefs.calorieMode]}`);
+  }
+
+  // Cuisine preferences
+  if (nutritionPrefs.cuisines && nutritionPrefs.cuisines.length > 0) {
+    lines.push(`Preferred Cuisines: ${nutritionPrefs.cuisines.join(', ')} (incorporate these styles where possible)`);
+  }
+
+  return lines.length > 0 ? `\nUser Dietary Preferences:\n${lines.map(l => `- ${l}`).join('\n')}` : '';
+}
+
+export const generateMealPlan = async (goals, userProfile = {}, nutritionPrefs = null) => {
   if (!apiKey) {
     throw new Error('API key missing. Please set VITE_GEMINI_API_KEY in your .env file.');
   }
@@ -19,26 +70,32 @@ export const generateMealPlan = async (goals, userProfile = {}) => {
     gender ? `Gender: ${gender}` : null
   ].filter(Boolean).join(', ');
 
+  const prefsStr = buildPrefsStr(nutritionPrefs);
+  const mealCount = nutritionPrefs?.mealCount || null;
+
   const systemPrompt = `You are an expert adaptive nutritionist and dietitian.
 
 User Goals: ${goalStr}
-${profileStr ? `User Profile: ${profileStr}` : ''}
+${profileStr ? `User Profile: ${profileStr}` : ''}${prefsStr}
 
 CRITICAL INSTRUCTIONS:
-1. The meal structure MUST be fully adaptive to the user's goals:
-   - For "Build Muscle": Design 5-6 high-protein meals spread throughout the day (caloric surplus).
-   - For "Lose Weight": Design a caloric deficit plan — could be 2-3 larger meals or intermittent fasting style (e.g. 16:8 window). Fewer but nutrient-dense meals.
-   - For "Improve Fitness" or "Stay Healthy": Design 3-4 balanced meals with good variety.
-   - If multiple goals exist, find the best nutritional strategy that serves all goals combined.
-2. Do NOT force a fixed breakfast/lunch/dinner/snacks structure. Let the meal timing and count be dictated purely by the goal strategy.
+1. The meal structure MUST strictly follow the User Dietary Preferences above — these are hard constraints.
+   - Respect every allergy/intolerance: if "dairy" is listed, NO dairy ingredient anywhere.
+   - Respect the diet type fully (e.g. vegan = zero animal products).
+   - Generate EXACTLY ${mealCount ? mealCount : 'the appropriate number of'} meal(s) based on the preference.
+   - Follow the calorie approach strictly when calculating dailyTargets.
+2. If no specific diet preference is given, adapt the meal count and calorie level based on goals:
+   - "Build Muscle": 5-6 high-protein meals, caloric surplus.
+   - "Lose Weight": 2-3 nutrient-dense meals or IF-style, caloric deficit.
+   - "Improve Fitness" / "Stay Healthy": 3-4 balanced meals, maintenance calories.
 3. Each meal must have a practical, home-cookable name. No generic names like "Meal 1".
-4. Include a brief note about WHY this meal structure was chosen for the user's specific goals.
+4. Include a brief note about WHY this meal structure was chosen for the user's specific goals and diet.
 5. Emoji for each meal should reflect the food visually.
 
 OUTPUT FORMAT:
 Return a raw JSON object (no markdown, no code blocks) with this exact structure:
 {
-  "strategyNote": "1-2 sentence explanation of why this meal structure was chosen for these goals",
+  "strategyNote": "1-2 sentence explanation of why this meal structure was chosen for these goals and dietary preferences",
   "dailyTargets": {
     "calories": 2400,
     "protein": 180,
@@ -75,7 +132,7 @@ CRITICAL: Return ONLY the raw JSON. No markdown, no code fences.`;
   }
 };
 
-export const generateProgressiveMealPlan = async (currentPlan, goals, userProfile = {}, completedDays = 1) => {
+export const generateProgressiveMealPlan = async (currentPlan, goals, userProfile = {}, completedDays = 1, nutritionPrefs = null) => {
   if (!apiKey) {
     throw new Error('API key missing. Please set VITE_GEMINI_API_KEY in your .env file.');
   }
@@ -92,23 +149,27 @@ export const generateProgressiveMealPlan = async (currentPlan, goals, userProfil
     gender ? `Gender: ${gender}` : null
   ].filter(Boolean).join(', ');
 
+  const prefsStr = buildPrefsStr(nutritionPrefs);
+  const mealCount = nutritionPrefs?.mealCount || null;
+
   const systemPrompt = `You are an expert adaptive nutritionist and dietitian.
 
 User Goals: ${goalStr}
-${profileStr ? `User Profile: ${profileStr}` : ''}
+${profileStr ? `User Profile: ${profileStr}` : ''}${prefsStr}
 Days of Nutrition Plan Completed: ${completedDays}
 
 The user just completed this previous day's meal plan:
 ${JSON.stringify(currentPlan)}
 
 CRITICAL INSTRUCTIONS:
-1. Analyze the previous plan and create a NEW plan for tomorrow.
-2. The new plan should show gradual progression or variation:
-   - For Muscle Gain: Slightly increase calories/protein if they are progressing, or just provide variety.
+1. Strictly honor all dietary preferences above — same hard constraints as always.
+2. Analyze the previous plan and create a NEW plan for tomorrow with variety and progression:
+   - For Muscle Gain: Slightly increase calories/protein, or just provide variety.
    - For Weight Loss: Keep calories strict but change up the recipes to prevent diet fatigue.
-   - For General Fitness: Introduce new healthy ingredients and a slightly different macro split for variety.
-3. Keep the same JSON structure as the original meal plan but REMOVE "strategyNote" and ADD "progressionNote".
-4. Add a NEW field "progressionNote" explaining how you adapted the plan from yesterday based on their goals and progress.
+   - For General Fitness: Introduce new healthy ingredients and a slightly different macro split.
+3. Generate EXACTLY ${mealCount ? mealCount : 'the appropriate number of'} meal(s) — same as yesterday's preference.
+4. Keep the same JSON structure but REMOVE "strategyNote" and ADD "progressionNote".
+5. Add a NEW field "progressionNote" explaining how you adapted from yesterday.
 
 OUTPUT FORMAT:
 Return a raw JSON object (no markdown, no code blocks) with this exact structure:
