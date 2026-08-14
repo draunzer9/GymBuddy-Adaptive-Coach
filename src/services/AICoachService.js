@@ -2,12 +2,21 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const apiKey = import.meta.env.VITE_LLM_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
 
-// Subtle, user-adaptive coach tone and equipment locker integration
+// Subtle, user-adaptive coach tone, joint safety, and equipment locker integration
 const getAdaptiveCoachPrompt = () => {
   const tone = localStorage.getItem('gymbuddy_coach_tone') || 'form';
   const experience = localStorage.getItem('gymbuddy_experience') || 'beginner';
   const savedEquip = localStorage.getItem('gymbuddy_equipment_list');
   const availableEquip = savedEquip ? JSON.parse(savedEquip) : ['barbell', 'dumbbells', 'machines', 'cable'];
+  
+  const savedPain = localStorage.getItem('gymbuddy_active_pain');
+  const activePain = savedPain ? JSON.parse(savedPain) : [];
+  
+  const savedProfile = localStorage.getItem('gymbuddy_user_profile');
+  let userProfile = {};
+  if (savedProfile) {
+    try { userProfile = JSON.parse(savedProfile); } catch (e) {}
+  }
 
   let toneInstruction = '';
   if (tone === 'form') {
@@ -27,11 +36,26 @@ const getAdaptiveCoachPrompt = () => {
     experienceInstruction = `- Experience Level: ADVANCED. Use standard athletic and anatomical terminology. Keep instructions direct, brief, and performance-oriented.`;
   }
 
+  let safetyInstructions = [];
+  const healthNote = (userProfile.medicalNotes || '').toLowerCase();
+  const healthConds = userProfile.healthConditions || [];
+
+  if (activePain.includes('knee') || healthNote.includes('acl') || healthConds.includes('acl') || healthConds.includes('knee')) {
+    safetyInstructions.push(`- CRITICAL ACL SURGERY & KNEE REHAB CONSTRAINT: The user has Knee Joint Pain / ACL Surgery history. NEVER prescribe loaded Barbell Squats, heavy leg extensions, or deep knee flexion under heavy load. Substitute ONLY with low-impact, joint-safe exercises (e.g. Bodyweight Wall Sits, Glute Bridges, Light Leg Press within safe ROM, or Upper Body focus).`);
+  }
+  if (activePain.includes('back') || healthNote.includes('spine') || healthNote.includes('back')) {
+    safetyInstructions.push(`- CRITICAL BACK PAIN CONSTRAINT: The user has lower back issues. Avoid heavy axial spinal loading like Barbell Squats or heavy Conventional Deadlifts. Use chest-supported or machine alternatives.`);
+  }
+  if (activePain.includes('shoulder')) {
+    safetyInstructions.push(`- CRITICAL SHOULDER CONSTRAINT: The user has shoulder pain. Avoid overhead presses or deep dips.`);
+  }
+
   return `
 ADAPTIVE COACH PERSONA (SUBTLE & USER-SPECIFIC):
 ${experienceInstruction}
 ${toneInstruction}
 - Available Equipment in Gym Locker: ${availableEquip.join(', ')}. Do NOT suggest workouts or exercises that require equipment NOT listed here.
+${safetyInstructions.length > 0 ? `\nMEDICAL & JOINT SAFETY CONSTRAINTS:\n${safetyInstructions.join('\n')}` : ''}
 `;
 };
 
