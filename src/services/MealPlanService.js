@@ -8,19 +8,25 @@ function buildPrefsStr(nutritionPrefs) {
 
   const lines = [];
 
-  // Diet type
+  // Diet types (multi-select)
   const dietLabels = {
     no_preference: 'No specific diet restriction',
     vegetarian: 'Vegetarian (no meat or fish)',
     vegan: 'Vegan (completely plant-based, no animal products)',
-    keto: 'Ketogenic (high fat, very low carb, <50g carbs/day)',
+    keto: 'Ketogenic (high fat, low carb, <50g carbs/day)',
     paleo: 'Paleo (whole, unprocessed foods — no grains, legumes, dairy)',
     mediterranean: 'Mediterranean diet (olive oil, fish, vegetables, whole grains, legumes)',
-    intermittent_fasting: 'Intermittent Fasting — design the eating window for 16:8 (eat between 12 PM and 8 PM)',
+    intermittent_fasting: 'Intermittent Fasting — 16:8 window (eat between 12 PM and 8 PM)',
     high_protein: 'High Protein priority (≥40% calories from protein)',
   };
-  if (nutritionPrefs.dietType && nutritionPrefs.dietType !== 'no_preference') {
-    lines.push(`Diet Type: ${dietLabels[nutritionPrefs.dietType] || nutritionPrefs.dietType}`);
+
+  const selectedDiets = Array.isArray(nutritionPrefs.dietTypes)
+    ? nutritionPrefs.dietTypes.filter(d => d !== 'no_preference')
+    : (nutritionPrefs.dietType && nutritionPrefs.dietType !== 'no_preference' ? [nutritionPrefs.dietType] : []);
+
+  if (selectedDiets.length > 0) {
+    const formatted = selectedDiets.map(d => dietLabels[d] || d).join(' AND ');
+    lines.push(`Combined Diet Preferences (MUST RESPECT ALL): ${formatted}`);
   }
 
   // Allergies / intolerances

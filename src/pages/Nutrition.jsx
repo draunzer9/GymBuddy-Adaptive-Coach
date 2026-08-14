@@ -196,15 +196,41 @@ function NutritionPreferencesModal({ initialPrefs, onSave, onClose, isFirstTime 
   const [step, setStep] = useState(1);
   const totalSteps = 4;
 
-  const [prefs, setPrefs] = useState({
-    dietType: 'no_preference',
-    allergies: [],
-    mealCount: 3,
-    calorieMode: 'maintenance',
-    customCalories: '',
-    cuisines: [],
-    ...initialPrefs,
+  const [prefs, setPrefs] = useState(() => {
+    const init = { ...initialPrefs };
+    let dietTypes = init.dietTypes;
+    if (!dietTypes) {
+      dietTypes = init.dietType ? [init.dietType] : ['no_preference'];
+    }
+    return {
+      dietTypes,
+      allergies: [],
+      mealCount: 3,
+      calorieMode: 'maintenance',
+      customCalories: '',
+      cuisines: [],
+      ...init,
+    };
   });
+
+  const toggleDietType = (id) => {
+    setPrefs(p => {
+      let current = [...(p.dietTypes || [])];
+      if (id === 'no_preference') {
+        return { ...p, dietTypes: ['no_preference'] };
+      }
+      current = current.filter(d => d !== 'no_preference');
+      if (current.includes(id)) {
+        current = current.filter(d => d !== id);
+      } else {
+        current.push(id);
+      }
+      if (current.length === 0) {
+        current = ['no_preference'];
+      }
+      return { ...p, dietTypes: current };
+    });
+  };
 
   const toggleAllergy = (id) => {
     setPrefs(p => ({
@@ -226,8 +252,6 @@ function NutritionPreferencesModal({ initialPrefs, onSave, onClose, isFirstTime 
 
   const handleNextStep = () => {
     if (step === 3) {
-      // When moving from Step 3 (Calorie Goal) to Step 4 (Meal Schedule),
-      // auto-suggest meal count if user hasn't explicitly set it or keep user preference
       const suggested = getSuggestedMealCount(prefs.calorieMode, prefs.customCalories);
       setPrefs(p => ({
         ...p,
@@ -248,7 +272,7 @@ function NutritionPreferencesModal({ initialPrefs, onSave, onClose, isFirstTime 
     return true;
   };
 
-  const stepTitles = ['Diet Type', 'Food Allergies', 'Calorie Goal', 'Meal Schedule'];
+  const stepTitles = ['Diet Types', 'Food Allergies', 'Calorie Goal', 'Meal Schedule'];
   const suggestedMealCount = getSuggestedMealCount(prefs.calorieMode, prefs.customCalories);
   const selectedCalMode = CALORIE_MODES.find(m => m.id === prefs.calorieMode);
 
@@ -285,23 +309,29 @@ function NutritionPreferencesModal({ initialPrefs, onSave, onClose, isFirstTime 
         {/* Step Content */}
         <div className="pref-step-content">
 
-          {/* Step 1 — Diet Type */}
+          {/* Step 1 — Diet Types (Multi-select) */}
           {step === 1 && (
-            <div className="pref-grid">
-              {DIET_TYPES.map(d => (
-                <button
-                  key={d.id}
-                  className={`pref-diet-card ${prefs.dietType === d.id ? 'selected' : ''}`}
-                  onClick={() => setPrefs(p => ({ ...p, dietType: d.id }))}
-                >
-                  <span className="pref-diet-emoji">{d.emoji}</span>
-                  <span className="pref-diet-label">{d.label}</span>
-                  <span className="pref-diet-desc">{d.desc}</span>
-                  {prefs.dietType === d.id && (
-                    <div className="pref-check"><CheckCircle2 size={14} /></div>
-                  )}
-                </button>
-              ))}
+            <div>
+              <p className="pref-helper-text">Select all diet styles that apply (you can select multiple options).</p>
+              <div className="pref-grid">
+                {DIET_TYPES.map(d => {
+                  const isSelected = (prefs.dietTypes || []).includes(d.id);
+                  return (
+                    <button
+                      key={d.id}
+                      className={`pref-diet-card ${isSelected ? 'selected' : ''}`}
+                      onClick={() => toggleDietType(d.id)}
+                    >
+                      <span className="pref-diet-emoji">{d.emoji}</span>
+                      <span className="pref-diet-label">{d.label}</span>
+                      <span className="pref-diet-desc">{d.desc}</span>
+                      {isSelected && (
+                        <div className="pref-check"><CheckCircle2 size={14} /></div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           )}
 
@@ -463,12 +493,22 @@ function NutritionPreferencesModal({ initialPrefs, onSave, onClose, isFirstTime 
 // ─── Preferences Summary Bar ─────────────────────────────────────────────────
 
 function PrefSummaryBar({ prefs, onEdit }) {
-  const diet = DIET_TYPES.find(d => d.id === prefs.dietType);
+  const selectedDiets = Array.isArray(prefs.dietTypes)
+    ? prefs.dietTypes
+    : (prefs.dietType ? [prefs.dietType] : ['no_preference']);
+
   const calMode = CALORIE_MODES.find(c => c.id === prefs.calorieMode);
   return (
     <div className="pref-summary-bar">
       <div className="pref-summary-chips">
-        <span className="pref-summary-chip diet">{diet?.emoji} {diet?.label}</span>
+        {selectedDiets.map(dt => {
+          const dObj = DIET_TYPES.find(d => d.id === dt);
+          return (
+            <span key={dt} className="pref-summary-chip diet">
+              {dObj?.emoji} {dObj?.label || dt}
+            </span>
+          );
+        })}
         <span className="pref-summary-chip calorie">
           {calMode?.emoji} {prefs.calorieMode === 'custom' ? `${prefs.customCalories} kcal` : calMode?.label}
         </span>
