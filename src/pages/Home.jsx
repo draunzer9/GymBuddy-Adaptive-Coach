@@ -93,40 +93,20 @@ function Home() {
 
   }, []);
 
-  // ✅ Auto-save session to Firestore on page unload and periodically
-  // This ensures user data is always persisted even if the browser is closed
-  // without logging out, preventing the "asked to register again" issue.
+  // ✅ Auto-save session to Firestore when user leaves the page
+  // Covers: browser close, tab switch, app minimize — without constant writes
   useEffect(() => {
     const userId = localStorage.getItem('gymbuddy_active_user_id');
     if (!userId) return;
 
-    // Save on browser close / tab close / navigation away
-    const handleBeforeUnload = () => {
-      // Use sendBeacon-compatible sync save via navigator.sendBeacon if possible
-      // But for Firestore, we just fire-and-forget the async save
-      saveActiveUserToDb(userId).catch(() => {});
-    };
-
-    // Save on visibility change (user switches tabs or minimizes)
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
         saveActiveUserToDb(userId).catch(() => {});
       }
     };
 
-    // Periodic auto-save every 2 minutes as a safety net
-    const autoSaveInterval = setInterval(() => {
-      saveActiveUserToDb(userId).catch(() => {});
-    }, 2 * 60 * 1000);
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
     document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      clearInterval(autoSaveInterval);
-    };
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
 
   // New User Mock Data

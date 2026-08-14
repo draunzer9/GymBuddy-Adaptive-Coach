@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dumbbell, Activity, ArrowRight, Zap } from 'lucide-react';
 import { loadUserFromDb } from '../services/DatabaseService';
@@ -6,50 +6,28 @@ import './Welcome.css';
 
 function Welcome() {
   const navigate = useNavigate();
-  const [isChecking, setIsChecking] = useState(true);
 
-  // Auto-redirect returning users — skip the welcome splash entirely
   useEffect(() => {
-    const checkSession = async () => {
-      const userId = localStorage.getItem('gymbuddy_active_user_id');
-      const isRegistered = localStorage.getItem('gymbuddy_is_registered');
+    const userId = localStorage.getItem('gymbuddy_active_user_id');
+    const isRegistered = localStorage.getItem('gymbuddy_is_registered');
 
-      if (userId && isRegistered === 'true') {
-        // Fast path: user has a valid local session
-        navigate('/home', { replace: true });
-        return;
-      }
+    // Fast path: user has a valid local session — redirect instantly
+    if (userId && isRegistered === 'true') {
+      navigate('/home', { replace: true });
+      return;
+    }
 
-      if (userId && !isRegistered) {
-        // Edge case: user ID exists but is_registered got lost
-        // (e.g. browser cleared partial storage, or old session bug)
-        // Try to recover from Firestore
-        try {
-          const restored = await loadUserFromDb(userId);
-          if (restored) {
-            localStorage.setItem('gymbuddy_active_user_id', userId);
-            navigate('/home', { replace: true });
-            return;
-          }
-        } catch (e) {
-          console.error('Firestore re-sync failed:', e);
+    // Rare edge case: user ID exists but registration flag was lost
+    // Try a one-time Firestore recovery in the background
+    if (userId && !isRegistered) {
+      loadUserFromDb(userId).then(restored => {
+        if (restored) {
+          localStorage.setItem('gymbuddy_active_user_id', userId);
+          navigate('/home', { replace: true });
         }
-      }
-
-      setIsChecking(false);
-    };
-
-    checkSession();
+      }).catch(() => {});
+    }
   }, [navigate]);
-
-  // Show nothing while we're checking the session to prevent flash of welcome screen
-  if (isChecking) {
-    return (
-      <div className="welcome-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>Loading...</div>
-      </div>
-    );
-  }
 
   return (
     <div className="welcome-container">
