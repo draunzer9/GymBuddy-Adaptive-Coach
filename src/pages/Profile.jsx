@@ -167,14 +167,13 @@ function Profile() {
       </div>
 
       {/* ── Personal Info ─────────────────────────── */}
-      <section className="profile-section" style={{ marginTop: '24px' }}>
+      <section className="profile-section card-section">
         <div 
           className="section-header-clickable" 
           onClick={() => setIsPersonalInfoOpen(!isPersonalInfoOpen)}
-          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', marginBottom: isPersonalInfoOpen ? '16px' : '0' }}
         >
-          <h2 className="section-title" style={{ marginBottom: 0 }}>
-            <User size={16} color="var(--brand-primary)" />
+          <h2 className="section-title">
+            <User size={18} color="var(--brand-primary)" />
             Personal Info
           </h2>
           <ChevronRight 
@@ -185,7 +184,7 @@ function Profile() {
         </div>
         
         {isPersonalInfoOpen && (
-          <div className="personal-info-grid" style={{ marginTop: '16px' }}>
+          <div className="personal-info-grid">
             <div className="info-card full-width">
               <span className="info-label">Email</span>
               <span className="info-value">{userProfile.email || 'Not provided'}</span>
@@ -211,14 +210,13 @@ function Profile() {
       </section>
 
       {/* ── Gym Locker (Equipment) ──────────────── */}
-      <section className="profile-section">
+      <section className="profile-section card-section">
         <div 
           className="section-header-clickable" 
           onClick={() => setIsLockerOpen(!isLockerOpen)}
-          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', marginBottom: isLockerOpen ? '8px' : '0' }}
         >
-          <h2 className="section-title" style={{ marginBottom: 0 }}>
-            <Dumbbell size={16} color="var(--brand-primary)" />
+          <h2 className="section-title">
+            <Dumbbell size={18} color="var(--brand-primary)" />
             Gym Locker
           </h2>
           <ChevronRight 
@@ -230,7 +228,7 @@ function Profile() {
         
         {isLockerOpen && (
           <>
-            <p className="section-description" style={{ marginTop: '8px' }}>
+            <p className="section-description">
               Toggle what tools are currently available. Next generated plans will adapt instantly.
             </p>
             <div className="locker-grid">
@@ -260,7 +258,7 @@ function Profile() {
       {/* ── Badges & Achievements ───────────────── */}
       <section className="profile-section">
         <h2 className="section-title">
-          <Award size={16} color="var(--brand-primary)" />
+          <Award size={18} color="var(--brand-primary)" />
           Locker Badges
         </h2>
         <div className="achievements-list">
