@@ -106,11 +106,17 @@ function Profile() {
     localStorage.setItem('gymbuddy_equipment_list', JSON.stringify(updated));
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     // Save the complete current state to database before clearing session
     const userId = localStorage.getItem('gymbuddy_active_user_id');
     if (userId) {
-      saveActiveUserToDb(userId);
+      try {
+        // ✅ CRITICAL: Must await the save to complete BEFORE clearing localStorage
+        await saveActiveUserToDb(userId);
+      } catch (error) {
+        console.error('Failed to save user data before logout:', error);
+        // Still proceed with logout even if save fails — user can re-login
+      }
     }
 
     // Track log out
