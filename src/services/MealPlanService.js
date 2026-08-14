@@ -34,6 +34,31 @@ function buildPrefsStr(nutritionPrefs) {
     lines.push(`STRICT Allergies / Intolerances — NEVER include these: ${nutritionPrefs.allergies.join(', ')}`);
   }
 
+  // Health Conditions
+  const healthLabels = {
+    diabetes: 'Diabetes / Prediabetes (STRICT LOW GI, complex carbs, zero added sugar, high fiber, controlled carb portions)',
+    hypertension: 'High Blood Pressure / Hypertension (LOW SODIUM, DASH diet rules, no heavy salt or processed foods)',
+    cholesterol: 'High Cholesterol (LOW SATURATED FAT, no fried foods, high soluble fiber, heart-healthy fats)',
+    pcos: 'PCOS / PCOD (Low GI, anti-inflammatory foods, balanced protein & complex carbs)',
+    gerd: 'GERD / Acid Reflux (AVOID spicy, highly acidic citrus/tomatoes, deep-fried foods, caffeine)',
+    thyroid: 'Hypothyroidism (Avoid excessive raw goitrogenic foods, provide balanced selenium/iodine)',
+    gout: 'Gout / High Uric Acid (LOW PURINE — avoid organ meats, excessive red meat, shellfish, high-fructose syrup)',
+    ibs: 'IBS / Sensitive Digestion (Low FODMAP principles, gentle, easily digestible foods)',
+  };
+
+  const selectedConditions = Array.isArray(nutritionPrefs.healthConditions)
+    ? nutritionPrefs.healthConditions
+    : [];
+
+  if (selectedConditions.length > 0 || (nutritionPrefs.customHealthCondition && nutritionPrefs.customHealthCondition.trim())) {
+    const formattedList = selectedConditions.map(c => healthLabels[c] || c).join('\n  • ');
+    let text = `CRITICAL MEDICAL HEALTH CONDITIONS (MUST ADAPT MEALS FOR SAFETY):\n  • ${formattedList}`;
+    if (nutritionPrefs.customHealthCondition && nutritionPrefs.customHealthCondition.trim()) {
+      text += `\n  • Additional Medical Note: ${nutritionPrefs.customHealthCondition.trim()}`;
+    }
+    lines.push(text);
+  }
+
   // Meal count
   if (nutritionPrefs.mealCount) {
     lines.push(`Number of meals per day: EXACTLY ${nutritionPrefs.mealCount} meals — no more, no fewer`);
@@ -86,6 +111,7 @@ ${profileStr ? `User Profile: ${profileStr}` : ''}${prefsStr}
 
 CRITICAL INSTRUCTIONS:
 1. The meal structure MUST strictly follow the User Dietary Preferences above — these are hard constraints.
+   - MEDICAL HEALTH CONDITIONS ARE HIGHEST PRIORITY: You MUST strictly adapt all recipes, ingredients, and macro ratios to accommodate listed health conditions (e.g. Low GI for Diabetes, Low Sodium for Hypertension, Low Acid for GERD, Low Purine for Gout).
    - Respect every allergy/intolerance: if "dairy" is listed, NO dairy ingredient anywhere.
    - Respect the diet type fully (e.g. vegan = zero animal products).
    - Generate EXACTLY ${mealCount ? mealCount : 'the appropriate number of'} meal(s) based on the preference.
@@ -95,7 +121,7 @@ CRITICAL INSTRUCTIONS:
    - "Lose Weight": 2-3 nutrient-dense meals or IF-style, caloric deficit.
    - "Improve Fitness" / "Stay Healthy": 3-4 balanced meals, maintenance calories.
 3. Each meal must have a practical, home-cookable name. No generic names like "Meal 1".
-4. Include a brief note about WHY this meal structure was chosen for the user's specific goals and diet.
+4. Include a brief note in strategyNote explaining WHY this meal structure and specific ingredient choices were selected for their goals, diet, AND health condition(s).
 5. Emoji for each meal should reflect the food visually.
 
 OUTPUT FORMAT:

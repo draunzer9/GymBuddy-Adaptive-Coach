@@ -158,6 +158,17 @@ const ALLERGIES = [
   { id: 'fish', label: 'Fish', emoji: '🐟' },
 ];
 
+const HEALTH_CONDITIONS = [
+  { id: 'diabetes', label: 'Diabetes / Prediabetes', emoji: '🩸' },
+  { id: 'hypertension', label: 'High BP / Hypertension', emoji: '🫀' },
+  { id: 'cholesterol', label: 'High Cholesterol', emoji: '❤️' },
+  { id: 'pcos', label: 'PCOS / PCOD', emoji: '🌸' },
+  { id: 'gerd', label: 'Acid Reflux / GERD', emoji: '🫁' },
+  { id: 'thyroid', label: 'Thyroid (Hypothyroid)', emoji: '🦋' },
+  { id: 'gout', label: 'High Uric Acid / Gout', emoji: '🦴' },
+  { id: 'ibs', label: 'IBS / Sensitive Digestion', emoji: '🥑' },
+];
+
 const MEAL_COUNTS = [2, 3, 4, 5, 6];
 
 const CALORIE_MODES = [
@@ -205,6 +216,8 @@ function NutritionPreferencesModal({ initialPrefs, onSave, onClose, isFirstTime 
     return {
       dietTypes,
       allergies: [],
+      healthConditions: [],
+      customHealthCondition: '',
       mealCount: 3,
       calorieMode: 'maintenance',
       customCalories: '',
@@ -238,6 +251,15 @@ function NutritionPreferencesModal({ initialPrefs, onSave, onClose, isFirstTime 
       allergies: p.allergies.includes(id)
         ? p.allergies.filter(a => a !== id)
         : [...p.allergies, id]
+    }));
+  };
+
+  const toggleHealthCondition = (id) => {
+    setPrefs(p => ({
+      ...p,
+      healthConditions: (p.healthConditions || []).includes(id)
+        ? (p.healthConditions || []).filter(c => c !== id)
+        : [...(p.healthConditions || []), id]
     }));
   };
 
@@ -335,10 +357,46 @@ function NutritionPreferencesModal({ initialPrefs, onSave, onClose, isFirstTime 
             </div>
           )}
 
-          {/* Step 2 — Allergies */}
+          {/* Step 2 — Allergies & Health Conditions */}
           {step === 2 && (
             <div>
-              <p className="pref-helper-text">Select any foods you need to avoid. We'll ensure none appear in your plan.</p>
+              {/* Health Conditions */}
+              <p className="pref-section-heading">🏥 Health & Medical Conditions</p>
+              <p className="pref-helper-text">Select any conditions so the AI tailor-makes safe recipes for your health.</p>
+              <div className="pref-allergy-grid">
+                {HEALTH_CONDITIONS.map(h => {
+                  const isSel = (prefs.healthConditions || []).includes(h.id);
+                  return (
+                    <button
+                      key={h.id}
+                      className={`pref-allergy-chip health-chip ${isSel ? 'selected' : ''}`}
+                      onClick={() => toggleHealthCondition(h.id)}
+                    >
+                      <span>{h.emoji}</span>
+                      <span>{h.label}</span>
+                      {isSel && <X size={12} />}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Custom Medical Condition text input */}
+              <div className="pref-custom-health-wrap">
+                <label className="pref-custom-label" style={{ marginTop: '12px' }}>
+                  Other Medical Condition / Health Note <span style={{ opacity: 0.5 }}>(optional)</span>
+                </label>
+                <input
+                  type="text"
+                  className="pref-custom-health-input"
+                  placeholder="e.g. Fatty Liver, Post-surgery, Low Potassium..."
+                  value={prefs.customHealthCondition || ''}
+                  onChange={e => setPrefs(p => ({ ...p, customHealthCondition: e.target.value }))}
+                />
+              </div>
+
+              {/* Allergies */}
+              <p className="pref-section-heading" style={{ marginTop: '20px' }}>⚠️ Food Allergies & Intolerances</p>
+              <p className="pref-helper-text">Select foods to strictly exclude from your meal plan.</p>
               <div className="pref-allergy-grid">
                 {ALLERGIES.map(a => (
                   <button
@@ -355,10 +413,12 @@ function NutritionPreferencesModal({ initialPrefs, onSave, onClose, isFirstTime 
               {prefs.allergies.length === 0 && (
                 <div className="pref-no-allergy">
                   <CheckCircle size={16} color="#4ade80" />
-                  <span>No allergies — enjoy everything!</span>
+                  <span>No allergies selected — enjoy everything!</span>
                 </div>
               )}
-              <p className="pref-helper-text" style={{ marginTop: '20px' }}>Preferred cuisines <span style={{ opacity: 0.5 }}>(optional)</span></p>
+
+              {/* Cuisines */}
+              <p className="pref-section-heading" style={{ marginTop: '20px' }}>🇮🇳 Preferred Cuisines <span style={{ opacity: 0.5 }}>(optional)</span></p>
               <div className="pref-allergy-grid">
                 {CUISINE_PREFS.map(c => (
                   <button
@@ -498,6 +558,8 @@ function PrefSummaryBar({ prefs, onEdit }) {
     : (prefs.dietType ? [prefs.dietType] : ['no_preference']);
 
   const calMode = CALORIE_MODES.find(c => c.id === prefs.calorieMode);
+  const healthConds = prefs.healthConditions || [];
+
   return (
     <div className="pref-summary-bar">
       <div className="pref-summary-chips">
@@ -509,6 +571,19 @@ function PrefSummaryBar({ prefs, onEdit }) {
             </span>
           );
         })}
+        {healthConds.length > 0 && healthConds.map(hc => {
+          const hObj = HEALTH_CONDITIONS.find(h => h.id === hc);
+          return (
+            <span key={hc} className="pref-summary-chip health">
+              {hObj?.emoji || '🏥'} {hObj?.label || hc}
+            </span>
+          );
+        })}
+        {prefs.customHealthCondition && prefs.customHealthCondition.trim() && (
+          <span className="pref-summary-chip health">
+            🩺 {prefs.customHealthCondition.trim()}
+          </span>
+        )}
         <span className="pref-summary-chip calorie">
           {calMode?.emoji} {prefs.calorieMode === 'custom' ? `${prefs.customCalories} kcal` : calMode?.label}
         </span>

@@ -649,6 +649,12 @@
   color: var(--brand-primary);
 }
 
+.pref-summary-chip.health {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
 .pref-summary-chip.meals {
   background: rgba(56, 189, 248, 0.1);
   color: #38bdf8;
@@ -662,6 +668,53 @@
 .pref-summary-chip.allergy {
   background: rgba(248, 113, 113, 0.1);
   color: #f87171;
+}
+
+/* ─── Preference Section Headings ─── */
+.pref-section-heading {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+/* Health Chip specific styling */
+.pref-allergy-chip.health-chip {
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.pref-allergy-chip.health-chip:hover {
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #f87171;
+}
+
+.pref-allergy-chip.health-chip.selected {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+/* Custom Health Input */
+.pref-custom-health-wrap {
+  margin-bottom: 16px;
+}
+
+.pref-custom-health-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.pref-custom-health-input:focus {
+  border-color: var(--brand-primary);
+  background: rgba(217, 249, 36, 0.04);
 }
 
 .pref-edit-btn {
