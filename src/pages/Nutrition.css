@@ -687,15 +687,16 @@
 
 /* ─── Preferences Modal Overlay ─── */
 .pref-overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.78);
   backdrop-filter: blur(6px);
   z-index: 200;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   animation: fadeInOverlay 0.2s ease;
+  border-radius: inherit;
 }
 
 @keyframes fadeInOverlay {
@@ -705,7 +706,7 @@
 
 .pref-modal {
   width: 100%;
-  max-height: 90vh;
+  max-height: 92%;
   background: linear-gradient(170deg, #1a2235 0%, #0f172a 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-bottom: none;
@@ -914,6 +915,25 @@
   margin-top: 8px;
 }
 
+/* ─── Suggestion Banner ─── */
+.pref-suggestion-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(217, 249, 36, 0.08);
+  border: 1px solid rgba(217, 249, 36, 0.22);
+  border-radius: 12px;
+  font-size: 13px;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+  line-height: 1.4;
+}
+
+.pref-suggestion-banner strong {
+  color: var(--brand-primary);
+}
+
 /* ─── Meal Count ─── */
 .pref-meal-count-row {
   display: flex;
@@ -923,17 +943,36 @@
 }
 
 .pref-count-btn {
+  position: relative;
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  padding: 12px 4px;
+  padding: 14px 4px 10px;
   border-radius: 12px;
   border: 1.5px solid var(--border);
   background: rgba(255, 255, 255, 0.03);
   cursor: pointer;
   transition: all 0.18s ease;
+}
+
+.pref-count-btn.suggested-btn {
+  border-color: rgba(217, 249, 36, 0.4);
+}
+
+.suggested-badge {
+  position: absolute;
+  top: -8px;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  background: var(--brand-primary);
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 .pref-count-btn:hover {

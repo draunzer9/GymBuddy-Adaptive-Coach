@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Apple, Droplets, Flame, ChevronRight, CheckCircle2, ChevronLeft,
   RefreshCw, Zap, Utensils, ChevronDown, ChevronUp, AlertCircle,
-  Loader2, Leaf, CheckCircle, Settings2, X, SlidersHorizontal,
+  Loader2, Leaf, CheckCircle, Settings2, X, SlidersHorizontal, Sparkles
 } from 'lucide-react';
 import BottomNavigation from '../components/BottomNavigation';
 import { generateMealPlan, generateProgressiveMealPlan } from '../services/MealPlanService';
@@ -141,11 +141,11 @@ const DIET_TYPES = [
   { id: 'no_preference', label: 'No Preference', emoji: '🍽️', desc: 'Eat everything' },
   { id: 'vegetarian', label: 'Vegetarian', emoji: '🥗', desc: 'No meat or fish' },
   { id: 'vegan', label: 'Vegan', emoji: '🌱', desc: 'Plant-based only' },
-  { id: 'keto', label: 'Keto', emoji: '🥑', desc: 'High fat, very low carb' },
-  { id: 'paleo', label: 'Paleo', emoji: '🥩', desc: 'Whole, unprocessed foods' },
+  { id: 'keto', label: 'Keto', emoji: '🥑', desc: 'High fat, low carb' },
+  { id: 'paleo', label: 'Paleo', emoji: '🥩', desc: 'Whole, unprocessed' },
   { id: 'mediterranean', label: 'Mediterranean', emoji: '🫒', desc: 'Heart-healthy, balanced' },
   { id: 'intermittent_fasting', label: 'Intermittent Fasting', emoji: '⏱️', desc: '16:8 or 18:6 window' },
-  { id: 'high_protein', label: 'High Protein', emoji: '💪', desc: 'Prioritize protein intake' },
+  { id: 'high_protein', label: 'High Protein', emoji: '💪', desc: 'Prioritize protein' },
 ];
 
 const ALLERGIES = [
@@ -175,6 +175,20 @@ const CUISINE_PREFS = [
   { id: 'middle_eastern', label: 'Middle Eastern', emoji: '🧆' },
   { id: 'mexican', label: 'Mexican', emoji: '🌮' },
 ];
+
+// Helper to determine suggested meal count based on calorie approach
+function getSuggestedMealCount(calorieMode, customCalories) {
+  if (calorieMode === 'deficit') return 3;
+  if (calorieMode === 'surplus') return 4;
+  if (calorieMode === 'custom' && customCalories) {
+    const cal = parseInt(customCalories, 10);
+    if (cal < 1600) return 2;
+    if (cal < 2200) return 3;
+    if (cal < 2800) return 4;
+    return 5;
+  }
+  return 3; // Default for maintenance
+}
 
 // ─── Preferences Modal ───────────────────────────────────────────────────────
 
@@ -210,18 +224,33 @@ function NutritionPreferencesModal({ initialPrefs, onSave, onClose, isFirstTime 
     }));
   };
 
+  const handleNextStep = () => {
+    if (step === 3) {
+      // When moving from Step 3 (Calorie Goal) to Step 4 (Meal Schedule),
+      // auto-suggest meal count if user hasn't explicitly set it or keep user preference
+      const suggested = getSuggestedMealCount(prefs.calorieMode, prefs.customCalories);
+      setPrefs(p => ({
+        ...p,
+        mealCount: p.mealCount || suggested
+      }));
+    }
+    setStep(s => s + 1);
+  };
+
   const handleSave = () => {
     onSave(prefs);
   };
 
   const canGoNext = () => {
-    if (step === 4 && prefs.calorieMode === 'custom') {
-      return prefs.customCalories && parseInt(prefs.customCalories) > 0;
+    if (step === 3 && prefs.calorieMode === 'custom') {
+      return prefs.customCalories && parseInt(prefs.customCalories, 10) > 0;
     }
     return true;
   };
 
-  const stepTitles = ['Diet Type', 'Food Allergies', 'Meal Schedule', 'Calorie Goal'];
+  const stepTitles = ['Diet Type', 'Food Allergies', 'Calorie Goal', 'Meal Schedule'];
+  const suggestedMealCount = getSuggestedMealCount(prefs.calorieMode, prefs.customCalories);
+  const selectedCalMode = CALORIE_MODES.find(m => m.id === prefs.calorieMode);
 
   return (
     <div className="pref-overlay" onClick={onClose || undefined}>
@@ -316,41 +345,10 @@ function NutritionPreferencesModal({ initialPrefs, onSave, onClose, isFirstTime 
             </div>
           )}
 
-          {/* Step 3 — Meal Count */}
+          {/* Step 3 — Calorie Goal */}
           {step === 3 && (
             <div>
-              <p className="pref-helper-text">How many meals do you prefer per day?</p>
-              <div className="pref-meal-count-row">
-                {MEAL_COUNTS.map(n => (
-                  <button
-                    key={n}
-                    className={`pref-count-btn ${prefs.mealCount === n ? 'selected' : ''}`}
-                    onClick={() => setPrefs(p => ({ ...p, mealCount: n }))}
-                  >
-                    <span className="pref-count-num">{n}</span>
-                    <span className="pref-count-lbl">
-                      {n === 2 ? 'Two' : n === 3 ? 'Three' : n === 4 ? 'Four' : n === 5 ? 'Five' : 'Six'}
-                    </span>
-                    <span className="pref-count-sub">
-                      {n === 2 ? 'IF Style' : n === 3 ? 'Classic' : n === 4 ? 'Standard' : n === 5 ? 'Muscle' : 'Athlete'}
-                    </span>
-                  </button>
-                ))}
-              </div>
-              <div className="pref-meal-desc-box">
-                {prefs.mealCount === 2 && <><strong>2 Meals:</strong> Suits intermittent fasting or OMAD. Larger, nutrient-dense meals.</>}
-                {prefs.mealCount === 3 && <><strong>3 Meals:</strong> Classic breakfast, lunch & dinner. Balanced for most goals.</>}
-                {prefs.mealCount === 4 && <><strong>4 Meals:</strong> Adds a snack. Great for sustained energy throughout the day.</>}
-                {prefs.mealCount === 5 && <><strong>5 Meals:</strong> Ideal for muscle building — keeps amino acids flowing all day.</>}
-                {prefs.mealCount === 6 && <><strong>6 Meals:</strong> Athlete-level frequency. Maximizes nutrient timing for peak performance.</>}
-              </div>
-            </div>
-          )}
-
-          {/* Step 4 — Calorie Goal */}
-          {step === 4 && (
-            <div>
-              <p className="pref-helper-text">What's your calorie approach?</p>
+              <p className="pref-helper-text">What's your calorie approach for your goals?</p>
               <div className="pref-calorie-list">
                 {CALORIE_MODES.map(m => (
                   <button
@@ -390,6 +388,47 @@ function NutritionPreferencesModal({ initialPrefs, onSave, onClose, isFirstTime 
               )}
             </div>
           )}
+
+          {/* Step 4 — Meal Schedule */}
+          {step === 4 && (
+            <div>
+              <div className="pref-suggestion-banner">
+                <Sparkles size={16} color="#d9f924" />
+                <span>
+                  Based on your <strong>{selectedCalMode?.label || 'Calorie Goal'}</strong>, we suggest <strong>{suggestedMealCount} meals/day</strong>.
+                </span>
+              </div>
+
+              <p className="pref-helper-text">How many meals do you prefer per day?</p>
+              <div className="pref-meal-count-row">
+                {MEAL_COUNTS.map(n => {
+                  const isSuggested = n === suggestedMealCount;
+                  return (
+                    <button
+                      key={n}
+                      className={`pref-count-btn ${prefs.mealCount === n ? 'selected' : ''} ${isSuggested ? 'suggested-btn' : ''}`}
+                      onClick={() => setPrefs(p => ({ ...p, mealCount: n }))}
+                    >
+                      {isSuggested && (
+                        <span className="suggested-badge">★ Rec</span>
+                      )}
+                      <span className="pref-count-num">{n}</span>
+                      <span className="pref-count-lbl">
+                        {n === 2 ? 'Two' : n === 3 ? 'Three' : n === 4 ? 'Four' : n === 5 ? 'Five' : 'Six'}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="pref-meal-desc-box">
+                {prefs.mealCount === 2 && <><strong>2 Meals:</strong> Suits intermittent fasting or OMAD. Larger, nutrient-dense meals.</>}
+                {prefs.mealCount === 3 && <><strong>3 Meals:</strong> Classic breakfast, lunch & dinner. Balanced for most goals.</>}
+                {prefs.mealCount === 4 && <><strong>4 Meals:</strong> Adds a snack. Great for sustained energy throughout the day.</>}
+                {prefs.mealCount === 5 && <><strong>5 Meals:</strong> Ideal for muscle building — keeps amino acids flowing all day.</>}
+                {prefs.mealCount === 6 && <><strong>6 Meals:</strong> Athlete-level frequency. Maximizes nutrient timing for peak performance.</>}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Modal Footer */}
@@ -401,7 +440,7 @@ function NutritionPreferencesModal({ initialPrefs, onSave, onClose, isFirstTime 
             </button>
           )}
           {step < totalSteps ? (
-            <button className="pref-next-btn" onClick={() => setStep(s => s + 1)}>
+            <button className="pref-next-btn" onClick={handleNextStep} disabled={!canGoNext()}>
               Next
               <ChevronRight size={16} />
             </button>
@@ -430,10 +469,10 @@ function PrefSummaryBar({ prefs, onEdit }) {
     <div className="pref-summary-bar">
       <div className="pref-summary-chips">
         <span className="pref-summary-chip diet">{diet?.emoji} {diet?.label}</span>
-        <span className="pref-summary-chip meals">🍽️ {prefs.mealCount} meals/day</span>
         <span className="pref-summary-chip calorie">
           {calMode?.emoji} {prefs.calorieMode === 'custom' ? `${prefs.customCalories} kcal` : calMode?.label}
         </span>
+        <span className="pref-summary-chip meals">🍽️ {prefs.mealCount} meals/day</span>
         {prefs.allergies && prefs.allergies.length > 0 && (
           <span className="pref-summary-chip allergy">⚠️ {prefs.allergies.length} avoided</span>
         )}
@@ -638,8 +677,8 @@ function Nutrition() {
             <div className="pref-teaser-chips">
               <span className="pref-teaser-chip">🥗 Diet type</span>
               <span className="pref-teaser-chip">⚠️ Allergies</span>
-              <span className="pref-teaser-chip">🍽️ Meal count</span>
               <span className="pref-teaser-chip">🔥 Calorie goal</span>
+              <span className="pref-teaser-chip">🍽️ Meal count</span>
             </div>
             <button className="btn btn-primary generate-btn" onClick={() => setShowPrefsModal(true)}>
               Set Preferences & Generate
